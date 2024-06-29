@@ -24,7 +24,11 @@ export class UserService {
     });
   }
 
-  findOne(id: number) {
+  findByEmail(email: string) {
+    return this.usersRepository.findOneBy({ email });
+  }
+
+  findOneById(id: number) {
     return this.usersRepository.findOneBy({ id });
   }
 
