@@ -12,12 +12,16 @@ export class UserService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
-  create(createUserDto: CreateUserDto) {
-    return this.usersRepository.create(createUserDto);
+  create(createUserDto: CreateUserDto): Promise<any> {
+    const user = this.usersRepository.create(createUserDto);
+    return this.usersRepository.save(user);
   }
 
   findAll() {
-    return this.usersRepository.find();
+    return this.usersRepository.find({
+      relations: ['client'],
+      relationLoadStrategy: 'query',
+    });
   }
 
   findOne(id: number) {
