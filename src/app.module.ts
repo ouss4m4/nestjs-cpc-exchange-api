@@ -5,6 +5,7 @@ import { User } from './user/entities/user.entity';
 import { ClientsModule } from './clients/clients.module';
 import { Client } from './clients/entities/client.entity';
 import { AuthModule } from './auth/auth.module';
+import { RedisModule } from './infra/redis/redis.module';
 
 @Module({
   imports: [
@@ -18,9 +19,11 @@ import { AuthModule } from './auth/auth.module';
       entities: [Client, User],
       synchronize: true,
     }),
+    RedisModule,
     UserModule,
     ClientsModule,
     AuthModule,
+    RedisModule,
   ],
 })
 export class AppModule {}
