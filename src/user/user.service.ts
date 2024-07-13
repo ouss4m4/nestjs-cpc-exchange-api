@@ -25,15 +25,18 @@ export class UserService {
     return this.usersRepository.save(user);
   }
 
-  findAll() {
-    const cachedValue = this.redisClient.get('users');
+  async findAll() {
+    const cachedValue = await this.redisClient.get('users');
+
     if (cachedValue) {
       return cachedValue;
     }
-    return this.usersRepository.find({
+    const users = await this.usersRepository.find({
       relations: ['client'],
       relationLoadStrategy: 'query',
     });
+    this.redisClient.set('users', JSON.stringify(users));
+    return users;
   }
 
   findByEmail(email: string) {
