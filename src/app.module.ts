@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { RedisModule } from './infra/redis/redis.module';
 import { LandersModule } from './landers/landers.module';
 import { Lander } from './landers/entities/lander.entity';
+import { CampaignsModule } from './campaigns/campaigns.module';
+import { Campaign } from './campaigns/entities/campaign.entity';
 
 @Module({
   imports: [
@@ -18,7 +20,7 @@ import { Lander } from './landers/entities/lander.entity';
       username: 'root',
       password: '61990',
       database: 'nestjs',
-      entities: [Client, User, Lander],
+      entities: [Client, User, Campaign, Lander],
       synchronize: true,
     }),
     RedisModule,
@@ -27,6 +29,7 @@ import { Lander } from './landers/entities/lander.entity';
     AuthModule,
     RedisModule,
     LandersModule,
+    CampaignsModule,
   ],
 })
 export class AppModule {}
