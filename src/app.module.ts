@@ -6,6 +6,8 @@ import { ClientsModule } from './clients/clients.module';
 import { Client } from './clients/entities/client.entity';
 import { AuthModule } from './auth/auth.module';
 import { RedisModule } from './infra/redis/redis.module';
+import { LandersModule } from './landers/landers.module';
+import { Lander } from './landers/entities/lander.entity';
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { RedisModule } from './infra/redis/redis.module';
       username: 'root',
       password: '61990',
       database: 'nestjs',
-      entities: [Client, User],
+      entities: [Client, User, Lander],
       synchronize: true,
     }),
     RedisModule,
@@ -24,6 +26,7 @@ import { RedisModule } from './infra/redis/redis.module';
     ClientsModule,
     AuthModule,
     RedisModule,
+    LandersModule,
   ],
 })
 export class AppModule {}
