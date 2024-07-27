@@ -1,6 +1,6 @@
 import { Campaign } from 'src/campaigns/entities/campaign.entity';
 import { TrafficSource } from 'src/traffic-sources/entities/traffic-source.entity';
-import { User } from 'src/user/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

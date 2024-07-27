@@ -29,7 +29,7 @@ export class UserService {
     const cachedValue = await this.redisClient.get('users');
 
     if (cachedValue) {
-      return cachedValue;
+      return JSON.parse(cachedValue);
     }
     const users = await this.usersRepository.find({
       relations: ['client'],
