@@ -21,15 +21,15 @@ export class Campaign {
   @Column({ name: 'name' })
   name: string;
 
-  @Column({ name: 'client_id' })
-  clientId: number;
+  @Column({ name: 'advertiser_id' })
+  advertiserId: number;
 
-  @ManyToOne(() => Client, (client) => client.users)
+  @ManyToOne(() => Client, (client) => client.campaigns)
   @JoinColumn({
     name: 'client_id',
-    foreignKeyConstraintName: 'fk_campaign_client',
+    foreignKeyConstraintName: 'fk_campaign_advertiser',
   })
-  client: Client;
+  advertiser: Client;
 
   @Column({ name: 'lander_id' })
   landerId: number;

@@ -1,3 +1,4 @@
+import { Campaign } from 'src/campaigns/entities/campaign.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
@@ -36,4 +37,7 @@ export class Client {
 
   @OneToMany(() => User, (user) => user.client)
   users: User[];
+
+  @OneToMany(() => Campaign, (campaign) => campaign.advertiser)
+  campaigns: Campaign[];
 }

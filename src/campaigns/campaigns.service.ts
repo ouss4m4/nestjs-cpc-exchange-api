@@ -27,14 +27,14 @@ export class CampaignsService {
   }
 
   async findOne(id: number) {
-    const lander = await this.campaignRepo.findOne({
+    const campaign = await this.campaignRepo.findOne({
       where: { id },
       withDeleted: true,
     });
-    if (!lander) {
-      throw new NotFoundException(`Lander with ID ${id} not found`);
+    if (!campaign) {
+      throw new NotFoundException(`Campaign with ID ${id} not found`);
     }
-    return lander;
+    return campaign;
   }
 
   async update(id: number, updateCampaignDto: UpdateCampaignDto) {
