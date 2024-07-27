@@ -9,13 +9,9 @@ import { RedisClientType } from 'redis';
 
 @Injectable()
 export class LandersService {
-  /**
-   *
-   */
   constructor(
     @InjectRepository(Lander)
     private landerRepository: Repository<Lander>,
-    @Inject('REDIS_CLIENT') private readonly redisClient: RedisClientType,
   ) {}
 
   async create(createLanderDto: CreateLanderDto) {
