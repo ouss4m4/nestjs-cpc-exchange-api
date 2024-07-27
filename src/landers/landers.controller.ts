@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { LandersService } from './landers.service';
 import { CreateLanderDto } from './dto/create-lander.dto';
@@ -38,5 +39,11 @@ export class LandersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.landersService.remove(+id);
+  }
+
+  @Patch(':id/restore')
+  @HttpCode(204)
+  restore(@Param('id') id: string) {
+    return this.landersService.restore(+id);
   }
 }
