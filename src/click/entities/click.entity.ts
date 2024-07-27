@@ -33,8 +33,26 @@ export class Click {
   @Column({ name: 'lander_id' })
   landerId: number;
 
+  @Column({ name: 'revenue', type: 'varchar', default: 0 })
+  revenue: number;
+
+  @Column({ name: 'payout', type: 'varchar', default: 0 })
+  payout: number;
+
+  @Column({ name: 'url' })
+  url: string;
+
+  @Column({ name: 'redirect' })
+  redirect: string;
+
+  @Column({ name: 'ip', type: 'varchar' })
+  ip: string;
+
+  @Column({ name: 'ua', type: 'varchar' })
+  ua: string;
+
   @Column({ name: 'status', type: 'tinyint', default: 1 })
-  isActive: number;
+  status: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
