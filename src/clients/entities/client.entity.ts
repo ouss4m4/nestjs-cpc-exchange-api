@@ -1,4 +1,5 @@
 import { Campaign } from 'src/campaigns/entities/campaign.entity';
+import { TrafficSource } from 'src/traffic-sources/entities/traffic-source.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
@@ -34,6 +35,9 @@ export class Client {
 
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
   updatedAt: Date;
+
+  @OneToMany(() => TrafficSource, (ts) => ts.publisher)
+  trafficSources: TrafficSource[];
 
   @OneToMany(() => User, (user) => user.client)
   users: User[];

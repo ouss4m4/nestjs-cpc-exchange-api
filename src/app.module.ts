@@ -10,6 +10,8 @@ import { LandersModule } from './landers/landers.module';
 import { Lander } from './landers/entities/lander.entity';
 import { CampaignsModule } from './campaigns/campaigns.module';
 import { Campaign } from './campaigns/entities/campaign.entity';
+import { TrafficSourcesModule } from './traffic-sources/traffic-sources.module';
+import { TrafficSource } from './traffic-sources/entities/traffic-source.entity';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { Campaign } from './campaigns/entities/campaign.entity';
       username: 'root',
       password: '61990',
       database: 'nestjs',
-      entities: [Client, User, Campaign, Lander],
+      entities: [Client, User, Campaign, Lander, TrafficSource],
       synchronize: true,
     }),
     RedisModule,
@@ -30,6 +32,7 @@ import { Campaign } from './campaigns/entities/campaign.entity';
     RedisModule,
     LandersModule,
     CampaignsModule,
+    TrafficSourcesModule,
   ],
 })
 export class AppModule {}
