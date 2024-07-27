@@ -12,6 +12,8 @@ import { CampaignsModule } from './campaigns/campaigns.module';
 import { Campaign } from './campaigns/entities/campaign.entity';
 import { TrafficSourcesModule } from './traffic-sources/traffic-sources.module';
 import { TrafficSource } from './traffic-sources/entities/traffic-source.entity';
+import { ClickModule } from './click/click.module';
+import { Click } from './click/entities/click.entity';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { TrafficSource } from './traffic-sources/entities/traffic-source.entity'
       username: 'root',
       password: '61990',
       database: 'nestjs',
-      entities: [Client, User, Campaign, Lander, TrafficSource],
+      entities: [Client, User, Campaign, Lander, TrafficSource, Click],
       synchronize: true,
     }),
     RedisModule,
@@ -33,6 +35,7 @@ import { TrafficSource } from './traffic-sources/entities/traffic-source.entity'
     LandersModule,
     CampaignsModule,
     TrafficSourcesModule,
+    ClickModule,
   ],
 })
 export class AppModule {}
