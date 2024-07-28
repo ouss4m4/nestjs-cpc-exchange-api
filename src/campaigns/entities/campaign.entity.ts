@@ -26,7 +26,7 @@ export class Campaign {
 
   @ManyToOne(() => Client, (client) => client.campaigns)
   @JoinColumn({
-    name: 'client_id',
+    name: 'advertiser_id',
     foreignKeyConstraintName: 'fk_campaign_advertiser',
   })
   advertiser: Client;

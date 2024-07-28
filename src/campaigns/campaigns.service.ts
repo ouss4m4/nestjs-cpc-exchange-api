@@ -13,6 +13,7 @@ export class CampaignsService {
   ) {}
   async create(createCampaignDto: CreateCampaignDto) {
     const campaign = this.campaignRepo.create(createCampaignDto);
+
     try {
       return await this.campaignRepo.save(campaign);
     } catch (error) {
@@ -26,10 +27,11 @@ export class CampaignsService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, relations: string[] = []) {
     const campaign = await this.campaignRepo.findOne({
       where: { id },
       withDeleted: true,
+      relations,
     });
     if (!campaign) {
       throw new NotFoundException(`Campaign with ID ${id} not found`);

@@ -6,10 +6,14 @@ import { Request } from 'express';
 export class ClickController {
   constructor(private readonly clickService: ClickService) {}
 
-  @Get()
-  @Redirect()
+  @Get(':ts_uuid')
+  // @Redirect()
   in(@Req() request: Request) {
-    const redirectUrl = this.clickService.handleClick(request);
-    return { url: redirectUrl };
+    try {
+      const redirectUrl = this.clickService.handleClick(request);
+      return redirectUrl;
+    } catch (error) {
+      return { url: 'https://bzouss.com' };
+    }
   }
 }

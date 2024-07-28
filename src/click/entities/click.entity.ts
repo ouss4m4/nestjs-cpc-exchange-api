@@ -8,7 +8,7 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -54,44 +54,57 @@ export class Click {
   @Column({ name: 'status', type: 'tinyint', default: 1 })
   status: number;
 
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    precision: 0,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+  })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    type: 'timestamp',
+    precision: 0,
+    nullable: true,
+  })
   deletedAt: Date;
 
-  @OneToOne(() => Client, (cl) => cl.id)
+  @ManyToOne(() => Client, (cl) => cl.id)
   @JoinColumn({
     name: 'publisher_id',
     foreignKeyConstraintName: 'fk_click_publisher',
   })
   publisher: Client;
 
-  @OneToOne(() => TrafficSource, (ts) => ts.id)
+  @ManyToOne(() => TrafficSource, (ts) => ts.id)
   @JoinColumn({
     name: 'traffic_source_id',
     foreignKeyConstraintName: 'fk_click_traffic_source',
   })
   trafficSource: TrafficSource;
 
-  @OneToOne(() => Client, (cl) => cl.id)
+  @ManyToOne(() => Client, (cl) => cl.id)
   @JoinColumn({
     name: 'advertiser_id',
     foreignKeyConstraintName: 'fk_click_advertiser',
   })
   advertiser: Client;
 
-  @OneToOne(() => Campaign, (cmp) => cmp.id)
+  @ManyToOne(() => Campaign, (cmp) => cmp.id)
   @JoinColumn({
     name: 'campaign_id',
     foreignKeyConstraintName: 'fk_click_campaign',
   })
   campaign: Campaign;
 
-  @OneToOne(() => Lander, (lander) => lander.id)
+  @ManyToOne(() => Lander, (lander) => lander.id)
   @JoinColumn({
     name: 'lander_id',
     foreignKeyConstraintName: 'fk_click_lander',

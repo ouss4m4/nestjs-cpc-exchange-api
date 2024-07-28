@@ -8,5 +8,5 @@ export class CreateCampaignDto {
   landerId: number;
 
   @IsNotEmpty()
-  clientId: number;
+  advertiserId: number;
 }
