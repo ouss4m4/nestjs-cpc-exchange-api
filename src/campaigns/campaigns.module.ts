@@ -8,5 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [TypeOrmModule.forFeature([Campaign])],
   controllers: [CampaignsController],
   providers: [CampaignsService],
+  exports: [CampaignsService],
 })
 export class CampaignsModule {}

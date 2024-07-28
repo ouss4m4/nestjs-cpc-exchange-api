@@ -37,6 +37,17 @@ export class TrafficSourcesService {
     return trafficSource;
   }
 
+  async findOneByUuid(uuid: string) {
+    const trafficSource = await this.trafficSourceRepo.findOne({
+      where: { uuid },
+      relations: ['publisher'],
+    });
+    if (!trafficSource) {
+      throw new NotFoundException(`Traffic Source with UUID ${uuid} not found`);
+    }
+    return trafficSource;
+  }
+
   async update(id: number, updateTrafficSourceDto: UpdateTrafficSourceDto) {
     const trafficSource = await this.findOne(id);
     if (!trafficSource) {

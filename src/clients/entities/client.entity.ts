@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
+import { ClientType } from '../enum/client.enum';
 
 @Entity()
 export class Client {
@@ -17,6 +18,9 @@ export class Client {
 
   @Column({ name: 'name' })
   name: string;
+
+  @Column({ type: 'enum', enum: ClientType })
+  type: ClientType;
 
   @Column({ name: 'address', nullable: true })
   address: string;

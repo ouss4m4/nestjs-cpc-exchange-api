@@ -8,12 +8,17 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Entity,
+  BeforeInsert,
 } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity()
 export class TrafficSource {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: 'uuid', unique: true })
+  uuid: string;
 
   @Column({ name: 'name' })
   name: string;
@@ -39,4 +44,11 @@ export class TrafficSource {
 
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
   deletedAt: Date;
+
+  @BeforeInsert()
+  generateUuid() {
+    if (!this.uuid) {
+      this.uuid = uuidv4();
+    }
+  }
 }

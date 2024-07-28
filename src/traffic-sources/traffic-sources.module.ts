@@ -8,5 +8,6 @@ import { TrafficSource } from './entities/traffic-source.entity';
   imports: [TypeOrmModule.forFeature([TrafficSource])],
   controllers: [TrafficSourcesController],
   providers: [TrafficSourcesService],
+  exports: [TrafficSourcesService],
 })
 export class TrafficSourcesModule {}
