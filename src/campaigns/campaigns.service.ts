@@ -21,9 +21,10 @@ export class CampaignsService {
     }
   }
 
-  async findAll() {
+  async findAll(relations: string[] = []) {
     return await this.campaignRepo.find({
       withDeleted: true,
+      relations,
     });
   }
 
