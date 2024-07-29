@@ -14,6 +14,7 @@ import { TrafficSourcesModule } from './traffic-sources/traffic-sources.module';
 import { TrafficSource } from './traffic-sources/entities/traffic-source.entity';
 import { ClickModule } from './click/click.module';
 import { Click } from './click/entities/click.entity';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { Click } from './click/entities/click.entity';
     CampaignsModule,
     TrafficSourcesModule,
     ClickModule,
+    SharedModule,
   ],
 })
 export class AppModule {}

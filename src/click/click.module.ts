@@ -3,18 +3,18 @@ import { ClickService } from './services/click.service';
 import { ClickController } from './click.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Click } from './entities/click.entity';
-import { IpService } from './services/ip.service';
-import { UserAgentService } from './services/userAgent.service';
 import { TrafficSourcesModule } from 'src/traffic-sources/traffic-sources.module';
 import { CampaignsModule } from 'src/campaigns/campaigns.module';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Click]),
     TrafficSourcesModule,
     CampaignsModule,
+    SharedModule,
   ],
   controllers: [ClickController],
-  providers: [ClickService, IpService, UserAgentService],
+  providers: [ClickService],
 })
 export class ClickModule {}

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { IpService } from './ip.service';
-import { UserAgentService } from './userAgent.service';
+import { IpService } from '../../shared/services/ip.service';
+import { UserAgentService } from '../../shared/services/userAgent.service';
 import { CreateClickDto } from '../dto/create-click.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Click } from '../entities/click.entity';
 import { Repository } from 'typeorm';
 import { TrafficSourcesService } from 'src/traffic-sources/traffic-sources.service';
-import { CampaignsService } from 'src/campaigns/campaigns.service';
+import { GetActiveCampaignsService } from 'src/shared/services/get-active-campaigns.service';
 
 @Injectable()
 export class ClickService {
@@ -17,7 +17,7 @@ export class ClickService {
     private userAgentService: UserAgentService,
     private ipService: IpService,
     private tsService: TrafficSourcesService,
-    private campService: CampaignsService,
+    private getActiveCampaigns: GetActiveCampaignsService,
   ) {}
   async handleClick(request: Request) {
     const ua = this.userAgentService.extractUserAgent(request);
@@ -27,11 +27,7 @@ export class ClickService {
       request.params.ts_uuid,
     );
 
-    const campaign = await this.campService.findOne(1, [
-      'advertiser',
-      'lander',
-    ]);
-    console.log(campaign);
+    const campaign = await this.getActiveCampaigns.getActiveCampaigns();
 
     const protocol = request.protocol;
     const host = request.get('host');
