@@ -1,16 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { CampaignsService } from 'src/campaigns/campaigns.service'; // Adjust the import path as necessary
+import { Inject, Injectable } from '@nestjs/common';
+import { RedisClientType } from 'redis';
 import { Campaign } from 'src/campaigns/entities/campaign.entity';
 
 @Injectable()
 export class GetActiveCampaignsService {
-  constructor(private readonly campaignsService: CampaignsService) {}
+  constructor(
+    @Inject('REDIS_CLIENT') private readonly redisClient: RedisClientType,
+  ) {}
 
   async getActiveCampaigns(): Promise<Campaign> {
-    const activeCampaigns = await this.campaignsService.findAll([
-      'lander',
-      'advertiser',
-    ]);
+    const cachedValue = await this.redisClient.get('active-campaigns');
+    if (!cachedValue) {
+      return null;
+    }
+    const activeCampaigns: Campaign[] = JSON.parse(cachedValue);
 
     return activeCampaigns[Math.floor(Math.random() * activeCampaigns.length)];
   }
