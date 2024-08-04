@@ -1,6 +1,12 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateClickDto {
+export class CreatePostbackDto {
+  @IsNotEmpty()
+  transactionId: string;
+
+  @IsNotEmpty()
+  clickId: number;
+
   @IsNotEmpty()
   publisherId: number;
 
@@ -17,23 +23,13 @@ export class CreateClickDto {
   landerId: number;
 
   @IsNotEmpty()
-  url: string;
-
-  @IsNotEmpty()
-  redirect: string;
-
-  @IsNotEmpty()
   revenue: string;
 
-  @IsNotEmpty()
-  payout: string;
+  url: string;
 
-  @IsNotEmpty()
   ip: string;
 
-  @IsNotEmpty()
   ua: string;
 
-  @IsNotEmpty()
   status: number;
 }

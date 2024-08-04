@@ -16,6 +16,8 @@ import { ClickModule } from './click/click.module';
 import { Click } from './click/entities/click.entity';
 import { SharedModule } from './shared/shared.module';
 import { TasksModule } from './tasks/tasks.module';
+import { PostbackModule } from './postback/postback.module';
+import { Postback } from './postback/entities/postback.entity';
 
 @Module({
   imports: [
@@ -26,7 +28,15 @@ import { TasksModule } from './tasks/tasks.module';
       username: 'root',
       password: '61990',
       database: 'nestjs',
-      entities: [Client, User, Campaign, Lander, TrafficSource, Click],
+      entities: [
+        Client,
+        User,
+        Campaign,
+        Lander,
+        TrafficSource,
+        Click,
+        Postback,
+      ],
       synchronize: true,
     }),
     RedisModule,
@@ -40,6 +50,7 @@ import { TasksModule } from './tasks/tasks.module';
     ClickModule,
     SharedModule,
     TasksModule,
+    PostbackModule,
   ],
 })
 export class AppModule {}

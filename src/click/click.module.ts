@@ -16,5 +16,6 @@ import { SharedModule } from 'src/shared/shared.module';
   ],
   controllers: [ClickController],
   providers: [ClickService],
+  exports: [ClickService],
 })
 export class ClickModule {}
