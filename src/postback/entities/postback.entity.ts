@@ -1,27 +1,28 @@
 import { Campaign } from 'src/campaigns/entities/campaign.entity';
+import { Click } from 'src/click/entities/click.entity';
 import { Client } from 'src/clients/entities/client.entity';
 import { Lander } from 'src/landers/entities/lander.entity';
 import { TrafficSource } from 'src/traffic-sources/entities/traffic-source.entity';
-import { v4 as uuidv4 } from 'uuid';
 import {
-  BeforeInsert,
+  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Entity } from 'typeorm/decorator/entity/Entity';
 
 @Entity()
-export class Click {
+export class Postback {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'uuid', unique: true })
-  uuid: string;
+  @Column({ name: 'click_id' })
+  clickId: number;
+
+  @Column({ type: 'uuid', name: 'transaction_id' })
+  transactionId: string;
 
   @Column({ name: 'publisher_id' })
   publisherId: number;
@@ -41,14 +42,8 @@ export class Click {
   @Column({ name: 'revenue', type: 'varchar', default: 0 })
   revenue: string;
 
-  @Column({ name: 'payout', type: 'varchar', default: 0 })
-  payout: string;
-
   @Column({ name: 'url' })
   url: string;
-
-  @Column({ name: 'redirect' })
-  redirect: string;
 
   @Column({ name: 'ip', type: 'varchar' })
   ip: string;
@@ -73,53 +68,52 @@ export class Click {
   })
   updatedAt: Date;
 
-  @DeleteDateColumn({
-    name: 'deleted_at',
-    type: 'timestamp',
-    precision: 0,
-    nullable: true,
-  })
-  deletedAt: Date;
-
   @ManyToOne(() => Client, (cl) => cl.id)
   @JoinColumn({
     name: 'publisher_id',
-    foreignKeyConstraintName: 'fk_click_publisher',
+    foreignKeyConstraintName: 'fk_postback_publisher',
   })
   publisher: Client;
 
   @ManyToOne(() => TrafficSource, (ts) => ts.id)
   @JoinColumn({
     name: 'traffic_source_id',
-    foreignKeyConstraintName: 'fk_click_traffic_source',
+    foreignKeyConstraintName: 'fk_postback_traffic_source',
   })
   trafficSource: TrafficSource;
 
   @ManyToOne(() => Client, (cl) => cl.id)
   @JoinColumn({
     name: 'advertiser_id',
-    foreignKeyConstraintName: 'fk_click_advertiser',
+    foreignKeyConstraintName: 'fk_postback_advertiser',
   })
   advertiser: Client;
 
   @ManyToOne(() => Campaign, (cmp) => cmp.id)
   @JoinColumn({
     name: 'campaign_id',
-    foreignKeyConstraintName: 'fk_click_campaign',
+    foreignKeyConstraintName: 'fk_postback_campaign',
   })
   campaign: Campaign;
 
   @ManyToOne(() => Lander, (lander) => lander.id)
   @JoinColumn({
     name: 'lander_id',
-    foreignKeyConstraintName: 'fk_click_lander',
+    foreignKeyConstraintName: 'fk_postback_lander',
   })
   lander: Lander;
 
-  @BeforeInsert()
-  generateUuid() {
-    if (!this.uuid) {
-      this.uuid = uuidv4();
-    }
-  }
+  // @ManyToOne(() => Click, (click) => click.uuid)
+  // @JoinColumn({
+  //   name: 'transaction_id',
+  //   foreignKeyConstraintName: 'fk_postback_click_uuid',
+  // })
+  // clickUuid: Click;
+
+  @ManyToOne(() => Click, (click) => click.id)
+  @JoinColumn({
+    name: 'click_id',
+    foreignKeyConstraintName: 'fk_postback_click_id',
+  })
+  click: Click;
 }

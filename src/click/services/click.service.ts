@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Request } from 'express';
 import { IpService } from '../../shared/services/ip.service';
 import { UserAgentService } from '../../shared/services/userAgent.service';
@@ -45,11 +45,20 @@ export class ClickService {
       ip,
       ua,
       url: fullUrl,
+      revenue: '0',
+      payout: '0',
       redirect: 'https://google.com',
       status: 1,
     };
     const click = this.clickRepo.create(clickData);
     this.clickRepo.save(click);
     return clickData.redirect;
+  }
+  async findOneByUuid(uuid: string) {
+    const click = await this.clickRepo.findOneBy({ uuid });
+    if (!click) {
+      throw new NotFoundException(`Click with UUID ${uuid} not found`);
+    }
+    return click;
   }
 }
