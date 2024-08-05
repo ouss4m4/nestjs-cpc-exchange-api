@@ -18,6 +18,8 @@ import { SharedModule } from './shared/shared.module';
 import { TasksModule } from './tasks/tasks.module';
 import { PostbackModule } from './postback/postback.module';
 import { Postback } from './postback/entities/postback.entity';
+import { QueuesModule } from './queues/queues.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -39,7 +41,14 @@ import { Postback } from './postback/entities/postback.entity';
       ],
       synchronize: true,
     }),
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
     RedisModule,
+    TasksModule,
     UserModule,
     ClientsModule,
     AuthModule,
@@ -49,8 +58,8 @@ import { Postback } from './postback/entities/postback.entity';
     TrafficSourcesModule,
     ClickModule,
     SharedModule,
-    TasksModule,
     PostbackModule,
+    QueuesModule,
   ],
 })
 export class AppModule {}
