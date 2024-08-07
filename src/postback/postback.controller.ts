@@ -15,11 +15,7 @@ import { QueueService } from 'src/queues/queue.service';
 
 @Controller('postback')
 export class PostbackController {
-  constructor(
-    private readonly clickService: ClickService,
-    private readonly postbackService: PostbackService,
-    // private readonly queueService: QueueService,
-  ) {}
+  constructor(private readonly queueService: QueueService) {}
 
   @Get()
   findOne(@Req() request: Request, @Res() res: Response) {
@@ -36,11 +32,11 @@ export class PostbackController {
       });
     }
 
-    // this.queueService.processPostback({
-    //   transaction_id: uuid,
-    //   payout: revenue,
-    //   url: fullUrl,
-    // });
+    this.queueService.processPostback({
+      transaction_id: uuid,
+      payout: revenue,
+      url: fullUrl,
+    });
 
     return res.status(200).json({ status: 200, success: true });
   }
