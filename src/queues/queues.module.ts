@@ -18,7 +18,6 @@ import { PostbackModule } from 'src/postback/postback.module';
     }),
     forwardRef(() => ClickModule),
     forwardRef(() => PostbackModule),
-    ,
   ],
   providers: [ProcessPostbackJob, QueueService],
   exports: [QueueService],

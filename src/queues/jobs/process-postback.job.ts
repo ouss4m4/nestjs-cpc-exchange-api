@@ -9,10 +9,8 @@ import { Repository } from 'typeorm';
 @Processor('postback-jobs')
 export class ProcessPostbackJob extends WorkerHost {
   constructor(
-    @InjectRepository(Click)
-    private clickRepo: Repository<Click>,
-    @InjectRepository(Postback)
-    private postbackRepo: Repository<Postback>,
+    @InjectRepository(Click) private clickRepo: Repository<Click>,
+    @InjectRepository(Postback) private pbRepo: Repository<Postback>,
   ) {
     super();
   }
@@ -40,8 +38,6 @@ export class ProcessPostbackJob extends WorkerHost {
       url,
       status: 1,
     };
-    // this.postbackRepo.save(postbackDto);
-    // Perform your job logic here
-    console.dir(postbackDto);
+    this.pbRepo.save(postbackDto);
   }
 }

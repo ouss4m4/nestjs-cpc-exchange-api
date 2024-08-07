@@ -61,4 +61,7 @@ export class ClickService {
     }
     return click;
   }
+  async create(click: Click) {
+    return await this.clickRepo.save(click);
+  }
 }

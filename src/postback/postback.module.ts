@@ -9,7 +9,7 @@ import { QueuesModule } from 'src/queues/queues.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Postback]),
-    ClickModule,
+    forwardRef(() => ClickModule),
     forwardRef(() => QueuesModule),
   ],
   controllers: [PostbackController],
