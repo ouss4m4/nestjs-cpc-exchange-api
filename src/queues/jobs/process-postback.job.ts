@@ -17,12 +17,27 @@ export class ProcessPostbackJob extends WorkerHost {
 
   async process(job: Job<any, any, string>): Promise<any> {
     const { transaction_id, payout, url } = job.data;
+    console.log('processing postback for click uuid: ' + transaction_id);
+    const click = await this.clickRepo
+      .findOneBy({ uuid: transaction_id })
+      .catch(() => {
+        throw 'df';
+      });
+    await new Promise((resolve) => {
+      console.log('processing');
+      setTimeout(() => {
+        console.log('timeout finished');
 
-    const click = await this.clickRepo.findOneBy({ uuid: transaction_id });
+        return resolve(true);
+      }, 2000);
+    });
 
     click.revenue = payout;
     click.payout = (payout * 0.8).toFixed(2);
-    this.clickRepo.save(click);
+    await this.clickRepo
+      .save(click)
+      .then(() => console.log('Click saved successfully'))
+      .catch((error) => console.error('Error saving click:', error));
 
     const postbackDto: CreatePostbackDto = {
       clickId: click.id,
@@ -38,6 +53,10 @@ export class ProcessPostbackJob extends WorkerHost {
       url,
       status: 1,
     };
-    this.pbRepo.save(postbackDto);
+    await this.pbRepo
+      .save(postbackDto)
+      .then(() => console.log('Postback saved successfully'))
+      .catch((error) => console.error('Error saving postback:', error));
+    console.log('job processed');
   }
 }
