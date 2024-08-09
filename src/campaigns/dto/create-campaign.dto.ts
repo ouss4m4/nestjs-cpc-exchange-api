@@ -9,4 +9,7 @@ export class CreateCampaignDto {
 
   @IsNotEmpty()
   advertiserId: number;
+
+  @IsNotEmpty()
+  countries?: number[];
 }

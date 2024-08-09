@@ -7,11 +7,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
   JoinColumn,
   DeleteDateColumn,
-  OneToOne,
+  OneToMany,
+  ManyToOne,
 } from 'typeorm';
+import { CampaignCountry } from './campaign-countries.entity';
 
 @Entity()
 export class Campaign {
@@ -34,12 +35,18 @@ export class Campaign {
   @Column({ name: 'lander_id' })
   landerId: number;
 
-  @OneToOne(() => Lander, (lander) => lander.id)
+  @ManyToOne(() => Lander, (lander) => lander.id)
   @JoinColumn({
     name: 'lander_id',
     foreignKeyConstraintName: 'fk_lander_campaign',
   })
   lander: Lander;
+
+  @OneToMany(
+    () => CampaignCountry,
+    (campaignCountry) => campaignCountry.campaign,
+  )
+  campaignCountries: CampaignCountry[];
 
   @Column({ name: 'is_active', default: true })
   isActive: boolean;

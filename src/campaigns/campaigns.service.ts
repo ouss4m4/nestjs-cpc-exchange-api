@@ -4,18 +4,36 @@ import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { Repository } from 'typeorm';
 import { Campaign } from './entities/campaign.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CampaignCountry } from './entities/campaign-countries.entity';
 
 @Injectable()
 export class CampaignsService {
   constructor(
     @InjectRepository(Campaign)
     private campaignRepo: Repository<Campaign>,
+    @InjectRepository(CampaignCountry)
+    private campaignCountryRepo: Repository<CampaignCountry>,
   ) {}
   async create(createCampaignDto: CreateCampaignDto) {
-    const campaign = this.campaignRepo.create(createCampaignDto);
+    const { countries, ...campaignData } = createCampaignDto;
+
+    const campaign = this.campaignRepo.create(campaignData);
 
     try {
-      return await this.campaignRepo.save(campaign);
+      const savedCampaign = await this.campaignRepo.save(campaign);
+
+      if (countries && countries.length > 0) {
+        const campaignCountries = countries.map((countryId: number) => {
+          return this.campaignCountryRepo.create({
+            campaign: savedCampaign,
+            country: { id: countryId } as any, // Assuming `countryId` is an array of country IDs
+          });
+        });
+
+        await this.campaignCountryRepo.save(campaignCountries);
+      }
+
+      return savedCampaign;
     } catch (error) {
       return error;
     }
@@ -28,7 +46,10 @@ export class CampaignsService {
     });
   }
 
-  async findOne(id: number, relations: string[] = []) {
+  async findOne(
+    id: number,
+    relations: string[] = ['campaignCountries.country', 'lander', 'advertiser'],
+  ) {
     const campaign = await this.campaignRepo.findOne({
       where: { id },
       withDeleted: true,
@@ -41,13 +62,34 @@ export class CampaignsService {
   }
 
   async update(id: number, updateCampaignDto: UpdateCampaignDto) {
+    const { countries, ...campaignData } = updateCampaignDto;
+
     const campaign = await this.findOne(id);
     if (!campaign) {
       throw new NotFoundException(`Campaign with ID ${id} not found`);
     }
-    Object.assign(campaign, updateCampaignDto);
+
+    Object.assign(campaign, campaignData);
+
     try {
-      return await this.campaignRepo.save(campaign);
+      const updatedCampaign = await this.campaignRepo.save(campaign);
+
+      if (countries && countries.length > 0) {
+        // Remove existing associations
+        await this.campaignCountryRepo.delete({ campaign: { id } });
+
+        // Add new associations
+        const campaignCountries = countries.map((countryId: number) => {
+          return this.campaignCountryRepo.create({
+            campaign: updatedCampaign,
+            country: { id: countryId } as any,
+          });
+        });
+
+        await this.campaignCountryRepo.save(campaignCountries);
+      }
+
+      return updatedCampaign;
     } catch (error) {
       return error;
     }

@@ -22,6 +22,7 @@ import { QueuesModule } from './queues/queues.module';
 import { BullModule } from '@nestjs/bullmq';
 import { CountriesModule } from './countries/countries.module';
 import { Country } from './countries/entities/country.entity';
+import { CampaignCountry } from './campaigns/entities/campaign-countries.entity';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { Country } from './countries/entities/country.entity';
         Click,
         Postback,
         Country,
+        CampaignCountry,
       ],
       synchronize: true,
     }),
