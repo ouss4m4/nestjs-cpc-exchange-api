@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { CampaignCountry } from 'src/campaigns/entities/campaign-countries.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class Country {
@@ -13,4 +14,10 @@ export class Country {
 
   @Column({ name: 'nicename' })
   niceName: string;
+
+  @OneToMany(
+    () => CampaignCountry,
+    (campaignCountry) => campaignCountry.country,
+  )
+  campaignCountries: CampaignCountry[];
 }
