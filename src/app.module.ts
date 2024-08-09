@@ -23,6 +23,9 @@ import { BullModule } from '@nestjs/bullmq';
 import { CountriesModule } from './countries/countries.module';
 import { Country } from './countries/entities/country.entity';
 import { CampaignCountry } from './campaigns/entities/campaign-countries.entity';
+import { ClickRollupModule } from './click-rollup/click-rollup.module';
+import { RollupCampaignDay } from './click-rollup/entities/rollup-campaign-day.entity';
+import { RollupCampaignHour } from './click-rollup/entities/rollup-campaign-hour.entity';
 
 @Module({
   imports: [
@@ -43,6 +46,8 @@ import { CampaignCountry } from './campaigns/entities/campaign-countries.entity'
         Postback,
         Country,
         CampaignCountry,
+        RollupCampaignDay,
+        RollupCampaignHour,
       ],
       synchronize: true,
     }),
@@ -66,6 +71,8 @@ import { CampaignCountry } from './campaigns/entities/campaign-countries.entity'
     PostbackModule,
     QueuesModule,
     CountriesModule,
+    ClickRollupModule,
+    ClickRollupModule,
   ],
 })
 export class AppModule {}

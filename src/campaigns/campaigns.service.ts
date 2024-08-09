@@ -74,6 +74,7 @@ export class CampaignsService {
     try {
       const updatedCampaign = await this.campaignRepo.save(campaign);
 
+      // TODO: all countries should be handled in validation?
       if (countries && countries.length > 0) {
         // Remove existing associations
         await this.campaignCountryRepo.delete({ campaign: { id } });
