@@ -2,13 +2,15 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { BuildCampaignCache } from '../cache-structure/build-campaign-cache.service';
-import { GenerateClickRollup } from '../rollups/generate-click-rollup.service';
+import { GenerateClickRollupHour } from 'src/click-rollup/generate-click-rollup-hour.service';
+import { GenerateClickRollupDay } from 'src/click-rollup/generate-click-rollup-day.service';
 
 @Injectable()
 export class TaskSchedulerService {
   constructor(
     private readonly buildCampaignCache: BuildCampaignCache,
-    private readonly clickRollupService: GenerateClickRollup,
+    private readonly rollupHour: GenerateClickRollupHour,
+    private readonly rollupDay: GenerateClickRollupDay,
   ) {}
 
   @Cron(CronExpression.EVERY_MINUTE)
@@ -17,7 +19,12 @@ export class TaskSchedulerService {
   }
 
   @Cron(CronExpression.EVERY_MINUTE)
-  handleClickRollupCron() {
-    this.clickRollupService.performRollup();
+  handleClickRollupHourCron() {
+    this.rollupHour.execute();
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  handleClickRollupDayCron() {
+    this.rollupDay.execute();
   }
 }
