@@ -20,6 +20,8 @@ import { PostbackModule } from './postback/postback.module';
 import { Postback } from './postback/entities/postback.entity';
 import { QueuesModule } from './queues/queues.module';
 import { BullModule } from '@nestjs/bullmq';
+import { CountriesModule } from './countries/countries.module';
+import { Country } from './countries/entities/country.entity';
 
 @Module({
   imports: [
@@ -38,6 +40,7 @@ import { BullModule } from '@nestjs/bullmq';
         TrafficSource,
         Click,
         Postback,
+        Country,
       ],
       synchronize: true,
     }),
@@ -60,6 +63,7 @@ import { BullModule } from '@nestjs/bullmq';
     SharedModule,
     PostbackModule,
     QueuesModule,
+    CountriesModule,
   ],
 })
 export class AppModule {}
