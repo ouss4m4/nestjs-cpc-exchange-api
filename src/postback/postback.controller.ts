@@ -11,11 +11,11 @@ import {
 import { PostbackService } from './postback.service';
 import { Request, Response } from 'express';
 import { ClickService } from 'src/click/services/click.service';
-import { QueueService } from 'src/queues/queue.service';
+import { PostbackJobProducer } from 'src/queues/postback/postback-producer.service';
 
 @Controller('postback')
 export class PostbackController {
-  constructor(private readonly queueService: QueueService) {}
+  constructor(private readonly pbJob: PostbackJobProducer) {}
 
   @Get()
   findOne(@Req() request: Request, @Res() res: Response) {
@@ -32,7 +32,7 @@ export class PostbackController {
       });
     }
 
-    this.queueService.processPostback({
+    this.pbJob.dispatch({
       transaction_id: uuid,
       payout: revenue,
       url: fullUrl,

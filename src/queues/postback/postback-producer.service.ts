@@ -3,12 +3,12 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 
 @Injectable()
-export class QueueService {
+export class PostbackJobProducer {
   constructor(
     @InjectQueue('postback-jobs') private readonly postbackQueue: Queue,
   ) {}
 
-  async processPostback(data: {
+  async dispatch(data: {
     transaction_id: string;
     payout: string;
     url: string;

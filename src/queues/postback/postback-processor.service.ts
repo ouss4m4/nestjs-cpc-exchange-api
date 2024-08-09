@@ -7,7 +7,7 @@ import { Postback } from 'src/postback/entities/postback.entity';
 import { Repository } from 'typeorm';
 
 @Processor('postback-jobs')
-export class ProcessPostbackJob extends WorkerHost {
+export class PostbackProcessor extends WorkerHost {
   constructor(
     @InjectRepository(Click) private clickRepo: Repository<Click>,
     @InjectRepository(Postback) private pbRepo: Repository<Postback>,
@@ -18,20 +18,10 @@ export class ProcessPostbackJob extends WorkerHost {
   async process(job: Job<any, any, string>): Promise<any> {
     const { transaction_id, payout, url } = job.data;
     console.log('processing postback for click uuid: ' + transaction_id);
-    const click = await this.clickRepo
-      .findOneBy({ uuid: transaction_id })
-      .catch(() => {
-        throw 'df';
-      });
-    await new Promise((resolve) => {
-      console.log('processing');
-      setTimeout(() => {
-        console.log('timeout finished');
-
-        return resolve(true);
-      }, 2000);
-    });
-
+    const click = await this.clickRepo.findOneBy({ uuid: transaction_id });
+    if (!click) {
+      console.error('click not found');
+    }
     click.revenue = payout;
     click.payout = (payout * 0.8).toFixed(2);
     await this.clickRepo
