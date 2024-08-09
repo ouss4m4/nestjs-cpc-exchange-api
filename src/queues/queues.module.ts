@@ -1,12 +1,12 @@
 import { BullModule } from '@nestjs/bullmq';
 import { forwardRef, Module } from '@nestjs/common';
-import { QueueService } from './queue.service';
-import { ProcessPostbackJob } from './jobs/process-postback.job';
 import { ClickModule } from 'src/click/click.module';
 import { PostbackModule } from 'src/postback/postback.module';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { ExpressAdapter } from '@bull-board/express';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
+import { PostbackProcessor } from './postback/postback-processor.service';
+import { PostbackJobProducer } from './postback/postback-producer.service';
 
 @Module({
   imports: [
@@ -44,7 +44,7 @@ import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
     forwardRef(() => ClickModule),
     forwardRef(() => PostbackModule),
   ],
-  providers: [ProcessPostbackJob, QueueService],
-  exports: [QueueService],
+  providers: [PostbackProcessor, PostbackJobProducer],
+  exports: [PostbackJobProducer],
 })
 export class QueuesModule {}
