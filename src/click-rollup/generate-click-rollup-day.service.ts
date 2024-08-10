@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { format, startOfDay, endOfDay } from 'date-fns';
+import { format, startOfDay, endOfDay, subMinutes } from 'date-fns';
 import { Click } from 'src/click/entities/click.entity';
 import { Repository } from 'typeorm';
 
@@ -12,8 +12,8 @@ export class GenerateClickRollupDay {
   ) {}
   async execute(startDate?: string, endDate?: string) {
     const now = new Date();
-    startDate = format(startOfDay(now), 'yyyy-MM-dd HH:00:00');
-    endDate = format(endOfDay(now), 'yyyy-MM-dd HH:59:59');
+    startDate = format(startOfDay(subMinutes(now, 1)), 'yyyy-MM-dd HH:00:00');
+    endDate = format(endOfDay(subMinutes(now, 1)), 'yyyy-MM-dd HH:59:59');
     console.log(startDate);
     console.log(endDate);
 

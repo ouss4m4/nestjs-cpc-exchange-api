@@ -8,11 +8,12 @@ export class ClickController {
   constructor(private readonly clickService: ClickService) {}
 
   @Get(':ts_uuid')
-  // @Redirect()
-  in(@Req() request: Request) {
+  @Redirect()
+  async in(@Req() request: Request) {
     try {
-      const redirectUrl = this.clickService.handleClick(request);
-      return redirectUrl;
+      const redirectUrl = await this.clickService.handleClick(request);
+
+      return { url: redirectUrl };
     } catch (error) {
       return error;
     }

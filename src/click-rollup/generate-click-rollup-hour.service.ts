@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { format, subHours } from 'date-fns';
+import { format, subMinutes } from 'date-fns';
 import { Click } from 'src/click/entities/click.entity';
 import { Repository } from 'typeorm';
 
@@ -12,10 +12,8 @@ export class GenerateClickRollupHour {
   ) {}
   async execute(startDate?: string, endDate?: string) {
     const now = new Date();
-    startDate = format(subHours(now, 1), 'yyyy-MM-dd HH:00:00');
-    endDate = format(subHours(now, 1), 'yyyy-MM-dd HH:59:59');
-    console.log(startDate);
-    console.log(endDate);
+    startDate = format(subMinutes(now, 1), 'yyyy-MM-dd HH:00:00');
+    endDate = format(subMinutes(now, 1), 'yyyy-MM-dd HH:59:59');
 
     const rawQuery = `
       INSERT INTO rollup_campaign_hour (
