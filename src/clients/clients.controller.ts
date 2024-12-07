@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 
 @Controller('clients')
 export class ClientsController {
@@ -19,7 +21,7 @@ export class ClientsController {
   create(@Body() createClientDto: CreateClientDto) {
     return this.clientsService.create(createClientDto);
   }
-
+  @UseGuards(LocalAuthGuard)
   @Get()
   findAll() {
     return this.clientsService.findAll();

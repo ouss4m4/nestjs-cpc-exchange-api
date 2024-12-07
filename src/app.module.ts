@@ -72,7 +72,6 @@ import { RollupCampaignHour } from './click-rollup/entities/rollup-campaign-hour
     QueuesModule,
     CountriesModule,
     ClickRollupModule,
-    ClickRollupModule,
   ],
 })
 export class AppModule {}
