@@ -6,12 +6,10 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
 import { CampaignsService } from './campaigns.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('campaigns')
 export class CampaignsController {
@@ -22,7 +20,6 @@ export class CampaignsController {
     return this.campaignsService.create(createCampaignDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.campaignsService.findAll();
