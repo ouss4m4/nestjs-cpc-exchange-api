@@ -23,7 +23,7 @@ WORKDIR /usr/src/app
 
 # Copy only production dependencies
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm install 
 
 # Copy built app from the previous stage
 COPY --from=build /usr/src/app/dist ./dist
