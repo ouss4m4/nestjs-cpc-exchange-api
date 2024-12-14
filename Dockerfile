@@ -1,18 +1,32 @@
-# Use Node.js base image
-FROM node:18-alpine
+# Stage 1: Build
+FROM node:18-alpine AS build
 
-# Set working directory in the container
 WORKDIR /usr/src/app
 
-# Copy package files and install dependencies
+# Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the source code to the container
+# Copy the application source
 COPY . .
 
-# Expose port 3001
+# Build the app (for production)
+RUN npm run build
+
+# Stage 2: Production runtime
+FROM node:18-alpine
+
+WORKDIR /usr/src/app
+
+# Copy only production dependencies
+COPY package*.json ./
+RUN npm install --only=production
+
+# Copy built app from the previous stage
+COPY --from=build /usr/src/app/dist ./dist
+
+# Expose port
 EXPOSE 3001
 
-# Command to run in dev and prod
-CMD ["npm", "run", "start:dev"]  
+# Command to run the app
+CMD ["node", "dist/main.js"]
