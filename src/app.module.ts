@@ -64,7 +64,6 @@ import { ConfigModule } from '@nestjs/config';
     UserModule,
     ClientsModule,
     AuthModule,
-    RedisModule,
     LandersModule,
     CampaignsModule,
     TrafficSourcesModule,
