@@ -51,10 +51,7 @@ import { ConfigModule } from '@nestjs/config';
         RollupCampaignDay,
         RollupCampaignHour,
       ],
-      synchronize: false,
-      ssl: {
-        rejectUnauthorized: false, // This bypasses certificate validation (useful for self-signed certs)
-      },
+      synchronize: process.env.ENVIRONMENT == 'PROD' ? false : true,
     }),
     BullModule.forRoot({
       connection: {
