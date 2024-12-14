@@ -19,10 +19,18 @@ export class ClientsService {
     return await this.clientsRepository.save(client);
   }
 
-  async findAll() {
-    return await this.clientsRepository.find({
-      withDeleted: true,
-    });
+  async findAll(query: { type?: string; status?: string }) {
+    const where: Record<string, any> = {};
+
+    if (query.type) {
+      where.type = query.type;
+    }
+
+    if (query.status) {
+      where.status = query.status;
+    }
+
+    return await this.clientsRepository.find({ where, withDeleted: true });
   }
 
   findOne(id: number) {

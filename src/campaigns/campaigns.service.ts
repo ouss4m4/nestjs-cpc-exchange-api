@@ -41,7 +41,6 @@ export class CampaignsService {
 
   async findAll(relations: string[] = []) {
     // Wait for 4 seconds before fetching data
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     return await this.campaignRepo.find({
       withDeleted: true,
       relations,

@@ -26,16 +26,18 @@ import { CampaignCountry } from './campaigns/entities/campaign-countries.entity'
 import { ClickRollupModule } from './click-rollup/click-rollup.module';
 import { RollupCampaignDay } from './click-rollup/entities/rollup-campaign-day.entity';
 import { RollupCampaignHour } from './click-rollup/entities/rollup-campaign-hour.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '61990',
-      database: 'nestjs',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [
         Client,
         User,
@@ -49,7 +51,10 @@ import { RollupCampaignHour } from './click-rollup/entities/rollup-campaign-hour
         RollupCampaignDay,
         RollupCampaignHour,
       ],
-      synchronize: true,
+      synchronize: false,
+      ssl: {
+        rejectUnauthorized: false, // This bypasses certificate validation (useful for self-signed certs)
+      },
     }),
     BullModule.forRoot({
       connection: {
