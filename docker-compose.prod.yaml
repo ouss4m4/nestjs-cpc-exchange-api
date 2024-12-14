@@ -13,7 +13,7 @@ services:
       - redis_cache
   dbsql:
     image: mysql:8.0
-    container_name: mysql_db_prod
+    container_name: mysql_server
     ports:
       - '3306:3306'
     environment:
@@ -24,7 +24,7 @@ services:
 
   redis_cache:
     image: redis:7.2
-    container_name: redis_docker_prod
+    container_name: redis_server
     ports:
       - '6379:6379'
 
