@@ -13,6 +13,9 @@ COPY . .
 # Build the app (for production)
 RUN npm run build
 
+# Check if build output is correct
+RUN ls -l dist/
+
 # Stage 2: Production runtime
 FROM node:18-alpine
 
