@@ -12,7 +12,7 @@ import { PostbackJobProducer } from './postback/postback-producer.service';
   imports: [
     BullModule.forRoot({
       connection: {
-        host: '127.0.0.1',
+        host: process.env.REDIS_HOST,
         port: 6379,
       },
       defaultJobOptions: {
