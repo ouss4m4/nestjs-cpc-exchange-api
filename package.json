@@ -24,7 +24,9 @@
     "migration:revert": "npm run typeorm migration:revert -- -d ./src/db/data-source.ts"
   },
   "dependencies": {
+    "@bull-board/api": "^5.21.3",
     "@bull-board/express": "^5.21.3",
+    "@bull-board/nestjs": "^5.21.3",
     "@nestjs/bullmq": "^10.2.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.3.0",
@@ -49,11 +51,10 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
-    "uuid": "^10.0.0",
-    "@bull-board/api": "^5.21.3",
-    "@bull-board/nestjs": "^5.21.3"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "fast-csv": "^5.0.2",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
