@@ -3,9 +3,6 @@ import * as dotenv from 'dotenv';
 
 // Load .env file
 dotenv.config();
-console.log('----');
-console.log(process.env.DB_USERNAME);
-console.log('----');
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
