@@ -48,8 +48,8 @@ export class Campaign {
   )
   campaignCountries: CampaignCountry[];
 
-  @Column({ name: 'is_active', default: true })
-  isActive: boolean;
+  @Column({ name: 'status', default: 1, type: 'tinyint' })
+  status: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
