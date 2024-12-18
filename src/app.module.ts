@@ -51,7 +51,7 @@ import { ConfigModule } from '@nestjs/config';
         RollupCampaignDay,
         RollupCampaignHour,
       ],
-      synchronize: process.env.ENVIRONMENT == 'PROD' ? false : true,
+      synchronize: true,
     }),
     BullModule.forRoot({
       connection: {
