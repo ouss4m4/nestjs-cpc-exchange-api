@@ -4,6 +4,7 @@ import { createReadStream } from 'fs';
 import { join } from 'path';
 import { parse } from 'fast-csv';
 import { Country } from '../../countries/entities/country.entity';
+
 const seedCountries = async () => {
   const dataSource: DataSource = await AppDataSource.initialize();
   const countryRepo = dataSource.getRepository(Country);
