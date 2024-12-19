@@ -30,9 +30,8 @@ services:
     image: certbot/certbot
     container_name: certbot
     volumes:
-      - ./certs:/etc/letsencrypt # Store certs in a volume (nginx take em also)
-      - ./nginx.conf:/etc/nginx/nginx.conf # Make sure Certbot can access your Nginx config
-    entrypoint: ['sh', '-c'] # Use sh instead of bash
+      - ./certs:/etc/letsencrypt # Store certs in a volume (nginx takes them)
+      - ./certbot:/var/www/certbot # Required for webroot authentication
     command: >
       certonly --webroot --webroot-path=/var/www/certbot
       --email samaouss@gmail.com
@@ -61,3 +60,4 @@ networks:
 
 volumes:
   db_data:
+  certs:
