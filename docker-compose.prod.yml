@@ -22,6 +22,7 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./certs:/etc/letsencrypt # Certs from certbot
+      - ./certbot-challenges:/var/www/certbot
     depends_on:
       - app
     networks:
