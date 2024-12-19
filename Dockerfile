@@ -13,7 +13,7 @@ COPY . .
 
 # Build the app
 RUN npm run build
-
+RUN npm run migration:run
 # Stage 2: Production
 FROM node:18-alpine AS production
 
