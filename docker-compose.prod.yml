@@ -32,11 +32,12 @@ services:
     volumes:
       - ./certs:/etc/letsencrypt # Store certs in a volume (nginx take em also)
       - ./nginx.conf:/etc/nginx/nginx.conf # Make sure Certbot can access your Nginx config
-    entrypoint: >
-      bash -c "
-        certbot certonly --webroot --webroot-path=/var/www/certbot -d api.bzouss.com --email samaouss@gmail.com --agree-tos --no-eff-email && 
-        nginx -s reload
-      "
+    entrypoint: ['sh', '-c'] # Use sh instead of bash
+    command: >
+      certonly --webroot --webroot-path=/var/www/certbot
+      --email samaouss@gmail.com
+      --agree-tos --no-eff-email
+      -d api.bzouss.com
     networks:
       - app_network
   dbsql:
