@@ -31,8 +31,8 @@ export class Client {
   @Column({ name: 'finance_mail', nullable: true })
   financeMail: string;
 
-  @Column({ name: 'is_active', default: true })
-  isActive: boolean;
+  @Column({ name: 'status', default: 1, type: 'tinyint' })
+  status: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;

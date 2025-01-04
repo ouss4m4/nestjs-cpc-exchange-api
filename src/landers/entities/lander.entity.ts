@@ -25,15 +25,15 @@ export class Lander {
   @Column({ name: 'client_id' })
   clientId: number;
 
-  @ManyToOne(() => Client, (client) => client.users)
+  @ManyToOne(() => Client, (client) => client.id)
   @JoinColumn({
     name: 'client_id',
     foreignKeyConstraintName: 'fk_lander_client',
   })
   client: Client;
 
-  @Column({ name: 'is_active', default: true })
-  isActive: boolean;
+  @Column({ default: 1, type: 'tinyint' })
+  status: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;

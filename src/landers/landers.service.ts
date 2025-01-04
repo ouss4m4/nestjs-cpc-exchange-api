@@ -26,6 +26,7 @@ export class LandersService {
   async findAll() {
     return await this.landerRepository.find({
       withDeleted: true,
+      relations: ['client'],
     });
   }
 

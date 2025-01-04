@@ -40,10 +40,29 @@ export class CampaignsService {
   }
 
   async findAll(relations: string[] = []) {
-    // Wait for 4 seconds before fetching data
     return await this.campaignRepo.find({
       withDeleted: true,
-      relations,
+      relations: [
+        'lander',
+        'advertiser',
+        'campaignCountries.country',
+        ...relations,
+      ],
+      select: {
+        id: true,
+        name: true,
+        landerId: true,
+        advertiserId: true,
+        status: true,
+        lander: {
+          id: true,
+          name: true,
+        },
+        advertiser: {
+          id: true,
+          name: true,
+        },
+      },
     });
   }
 
