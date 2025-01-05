@@ -1,4 +1,3 @@
-import { FindManyOptions, FindOptionsWhere } from 'typeorm';
 import {
   Controller,
   Get,
@@ -12,7 +11,6 @@ import {
 import { CampaignsService } from './campaigns.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
-import { Campaign } from './entities/campaign.entity';
 
 @Controller('campaigns')
 export class CampaignsController {
@@ -25,15 +23,20 @@ export class CampaignsController {
 
   @Get()
   findAll(
-    @Query('advId') advertiserId: string,
-    @Query('status') status: string,
+    @Query('advId') advertiserId: number,
+    @Query('status') status: number,
+    @Query('country') country: number,
   ) {
-    const queryOption: FindManyOptions<Campaign> = {};
-    const where: FindOptionsWhere<Campaign> = {};
-    if (advertiserId) where.advertiserId = Number(advertiserId);
-    if (status) where.status = Number(status);
-    queryOption.where = where;
-    return this.campaignsService.findAll(queryOption);
+    const options: {
+      advertiserId?: number;
+      status?: number;
+      country?: number;
+    } = {};
+    if (advertiserId) options['advertiserId'] = advertiserId;
+    if (status) options['status'] = status;
+    if (country) options['country'] = country;
+
+    return this.campaignsService.findAll(options);
   }
 
   @Get(':id')

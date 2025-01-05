@@ -19,9 +19,7 @@ export class GetActiveCampaignsService {
       ];
     }
     // TODO: call the build campaign cache dont do it here
-    const activeCampaigns = await this.campService.findAll({
-      relations: ['lander', 'advertiser'],
-    });
+    const activeCampaigns = await this.campService.findAll({});
 
     if (activeCampaigns.length > 0) {
       await this.redisClient.set(

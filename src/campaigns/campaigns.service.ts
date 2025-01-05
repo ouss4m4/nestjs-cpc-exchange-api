@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
-import { Repository, FindManyOptions } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { Campaign } from './entities/campaign.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CampaignCountry } from './entities/campaign-countries.entity';
@@ -39,35 +39,48 @@ export class CampaignsService {
     }
   }
 
-  async findAll(options: FindManyOptions<Campaign> = {}) {
-    return await this.campaignRepo.find({
-      withDeleted: true,
-      relations: ['lander', 'advertiser', 'countries.country'],
-      select: {
-        id: true,
-        name: true,
-        landerId: true,
-        advertiserId: true,
-        status: true,
-        lander: {
-          id: true,
-          name: true,
-        },
-        advertiser: {
-          id: true,
-          name: true,
-        },
-        countries: {
-          id: true, // Select fields for the pivot table if needed
-          country: {
-            id: true, // Only include specific fields from `country`
-            name: true,
-            niceName: true,
-          },
-        },
-      },
-      ...options,
-    });
+  async findAll({
+    advertiserId,
+    status,
+    country,
+  }: {
+    advertiserId?: number;
+    status?: number;
+    country?: number;
+  }) {
+    const queryBuilder = this.campaignRepo.createQueryBuilder('campaign');
+
+    // Include related entities
+    queryBuilder
+      .leftJoinAndSelect('campaign.advertiser', 'advertiser') // Join advertiser
+      .leftJoinAndSelect('campaign.lander', 'lander') // Join lander
+      .leftJoinAndSelect('campaign.countries', 'campaignCountries') // Unique alias for campaign_countries
+      .leftJoinAndSelect('campaignCountries.country', 'countryEntity'); // Unique alias for country
+
+    // Add filters based on query parameters
+    if (advertiserId) {
+      queryBuilder.andWhere('campaign.advertiserId = :advertiserId', {
+        advertiserId: Number(advertiserId),
+      });
+    }
+
+    if (status) {
+      queryBuilder.andWhere('campaign.status = :status', {
+        status: Number(status),
+      });
+    }
+
+    if (country && country != 1) {
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where('campaignCountries.country = :country', {
+            country: Number(country),
+          }).orWhere('campaignCountries.country = 1');
+        }),
+      );
+    }
+
+    return queryBuilder.getMany();
   }
 
   async findOne(
