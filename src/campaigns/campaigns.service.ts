@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
-import { Repository } from 'typeorm';
+import { Repository, FindManyOptions } from 'typeorm';
 import { Campaign } from './entities/campaign.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CampaignCountry } from './entities/campaign-countries.entity';
@@ -39,10 +39,10 @@ export class CampaignsService {
     }
   }
 
-  async findAll(relations: string[] = []) {
+  async findAll(options: FindManyOptions<Campaign> = {}) {
     return await this.campaignRepo.find({
       withDeleted: true,
-      relations: ['lander', 'advertiser', 'countries.country', ...relations],
+      relations: ['lander', 'advertiser', 'countries.country'],
       select: {
         id: true,
         name: true,
@@ -66,6 +66,7 @@ export class CampaignsService {
           },
         },
       },
+      ...options,
     });
   }
 
