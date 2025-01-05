@@ -11,7 +11,9 @@ export class BuildCampaignCache {
 
   async buildCache(): Promise<void> {
     console.log('starting cache');
-    const campaigns = await this.campService.findAll(['lander', 'advertiser']);
+    const campaigns = await this.campService.findAll({
+      relations: ['lander', 'advertiser'],
+    });
     this.redisClient.set('active-campaigns', JSON.stringify(campaigns));
     console.log('Done');
   }
