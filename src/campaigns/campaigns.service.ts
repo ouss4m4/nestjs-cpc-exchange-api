@@ -42,12 +42,7 @@ export class CampaignsService {
   async findAll(relations: string[] = []) {
     return await this.campaignRepo.find({
       withDeleted: true,
-      relations: [
-        'lander',
-        'advertiser',
-        'campaignCountries.country',
-        ...relations,
-      ],
+      relations: ['lander', 'advertiser', 'countries.country', ...relations],
       select: {
         id: true,
         name: true,
@@ -62,13 +57,21 @@ export class CampaignsService {
           id: true,
           name: true,
         },
+        countries: {
+          id: true, // Select fields for the pivot table if needed
+          country: {
+            id: true, // Only include specific fields from `country`
+            name: true,
+            niceName: true,
+          },
+        },
       },
     });
   }
 
   async findOne(
     id: number,
-    relations: string[] = ['campaignCountries.country', 'lander', 'advertiser'],
+    relations: string[] = ['countries.country', 'lander', 'advertiser'],
   ) {
     const campaign = await this.campaignRepo.findOne({
       where: { id },

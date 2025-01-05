@@ -3,7 +3,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLanderDto } from './dto/create-lander.dto';
 import { UpdateLanderDto } from './dto/update-lander.dto';
 import { Lander } from './entities/lander.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RedisClientType } from 'redis';
 
@@ -23,11 +23,8 @@ export class LandersService {
     }
   }
 
-  async findAll() {
-    return await this.landerRepository.find({
-      withDeleted: true,
-      relations: ['client'],
-    });
+  async findAll(findOptions: FindManyOptions<Lander> = {}) {
+    return await this.landerRepository.find(findOptions);
   }
 
   async findOne(id: number) {
