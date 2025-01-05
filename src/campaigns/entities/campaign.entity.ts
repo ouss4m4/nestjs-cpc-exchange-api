@@ -46,7 +46,7 @@ export class Campaign {
     () => CampaignCountry,
     (campaignCountry) => campaignCountry.campaign,
   )
-  campaignCountries: CampaignCountry[];
+  countries: CampaignCountry[];
 
   @Column({ name: 'status', default: 1, type: 'tinyint' })
   status: number;

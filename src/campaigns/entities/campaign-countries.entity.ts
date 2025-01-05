@@ -7,7 +7,7 @@ export class CampaignCountry {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Campaign, (campaign) => campaign.campaignCountries, {
+  @ManyToOne(() => Campaign, (campaign) => campaign.countries, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'campaign_id' })
