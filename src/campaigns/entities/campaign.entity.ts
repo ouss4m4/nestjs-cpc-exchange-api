@@ -19,36 +19,19 @@ export class Campaign {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'name' })
+  @Column()
   name: string;
 
   @Column({ name: 'advertiser_id' })
   advertiserId: number;
 
-  @ManyToOne(() => Client, (client) => client.campaigns)
-  @JoinColumn({
-    name: 'advertiser_id',
-    foreignKeyConstraintName: 'fk_campaign_advertiser',
-  })
-  advertiser: Client;
-
   @Column({ name: 'lander_id' })
   landerId: number;
 
-  @ManyToOne(() => Lander, (lander) => lander.id)
-  @JoinColumn({
-    name: 'lander_id',
-    foreignKeyConstraintName: 'fk_lander_campaign',
-  })
-  lander: Lander;
+  @Column({ type: 'json' })
+  device: Record<string, any>;
 
-  @OneToMany(
-    () => CampaignCountry,
-    (campaignCountry) => campaignCountry.campaign,
-  )
-  countries: CampaignCountry[];
-
-  @Column({ name: 'status', default: 1, type: 'tinyint' })
+  @Column({ default: 1, type: 'tinyint' })
   status: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
@@ -59,4 +42,24 @@ export class Campaign {
 
   @DeleteDateColumn({ name: 'deleted_at', type: 'timestamp', nullable: true })
   deletedAt: Date;
+
+  @ManyToOne(() => Lander, (lander) => lander.id)
+  @JoinColumn({
+    name: 'lander_id',
+    foreignKeyConstraintName: 'fk_lander_campaign',
+  })
+  lander: Lander;
+
+  @ManyToOne(() => Client, (client) => client.campaigns)
+  @JoinColumn({
+    name: 'advertiser_id',
+    foreignKeyConstraintName: 'fk_campaign_advertiser',
+  })
+  advertiser: Client;
+
+  @OneToMany(
+    () => CampaignCountry,
+    (campaignCountry) => campaignCountry.campaign,
+  )
+  countries: CampaignCountry[];
 }
