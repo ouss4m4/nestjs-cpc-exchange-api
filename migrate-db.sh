@@ -10,6 +10,7 @@ done
 # npm run build
 npm run migration:generate
 npm run migration:run
-# node dist/db/seed-data/countrySeeder.js
+node dist/db/seed-data/countrySeeder.js
+node dist/db/seed-data/deviceSeeder.js
 # Start the app
 npm run start:prod
