@@ -52,10 +52,10 @@ export class CampaignsService {
 
     // Include related entities
     queryBuilder
-      .leftJoinAndSelect('campaign.advertiser', 'advertiser') // Join advertiser
-      .leftJoinAndSelect('campaign.lander', 'lander') // Join lander
-      .leftJoinAndSelect('campaign.countries', 'campaignCountries') // Unique alias for campaign_countries
-      .leftJoinAndSelect('campaignCountries.country', 'countryEntity'); // Unique alias for country
+      .leftJoinAndSelect('campaign.advertiser', 'advertiser')
+      .leftJoinAndSelect('campaign.lander', 'lander')
+      .leftJoinAndSelect('campaign.countries', 'campaignCountries')
+      .leftJoinAndSelect('campaignCountries.country', 'countryEntity');
 
     // Add filters based on query parameters
     if (advertiserId) {
@@ -70,12 +70,16 @@ export class CampaignsService {
       });
     }
 
-    if (country && country != 1) {
+    if (country && country !== 1) {
+      // Ensure the specified country is associated
       queryBuilder.andWhere(
         new Brackets((qb) => {
-          qb.where('campaignCountries.country = :country', {
-            country: Number(country),
-          }).orWhere('campaignCountries.country = 1');
+          qb.where(
+            'EXISTS (SELECT 1 FROM campaign_countries cc WHERE cc.campaign_id = campaign.id AND cc.country_id = :country)',
+            {
+              country: Number(country),
+            },
+          ).orWhere('campaignCountries.country = 1');
         }),
       );
     }
