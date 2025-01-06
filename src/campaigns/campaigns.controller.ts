@@ -22,7 +22,7 @@ export class CampaignsController {
   }
 
   @Get()
-  findAll(
+  async findAll(
     @Query('advId') advertiserId: number,
     @Query('status') status: number,
     @Query('country') country: number,
@@ -36,7 +36,12 @@ export class CampaignsController {
     if (status) options['status'] = status;
     if (country) options['country'] = country;
 
-    return this.campaignsService.findAll(options);
+    const campaigns = await this.campaignsService.findAll(options);
+
+    return campaigns.map((camp) => ({
+      ...camp,
+      countries: camp.countries.map(({ country }) => country),
+    }));
   }
 
   @Get(':id')
