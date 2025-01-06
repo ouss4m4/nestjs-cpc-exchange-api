@@ -17,6 +17,7 @@ import { CountriesModule } from './countries/countries.module';
 import { ClickRollupModule } from './click-rollup/click-rollup.module';
 import { ConfigModule } from '@nestjs/config';
 import { AppDataSource } from 'src/db/data-source';
+import { DeviceModule } from './device/device.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { AppDataSource } from 'src/db/data-source';
     QueuesModule,
     CountriesModule,
     ClickRollupModule,
+    DeviceModule,
   ],
 })
 export class AppModule {}
