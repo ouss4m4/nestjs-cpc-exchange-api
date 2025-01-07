@@ -13,6 +13,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { CampaignCountry } from './campaign-countries.entity';
+import { Device } from 'src/device/entities/device.entity';
 
 @Entity()
 export class Campaign {
@@ -29,7 +30,7 @@ export class Campaign {
   landerId: number;
 
   @Column({ type: 'json' })
-  device: Record<string, any>;
+  device: Device[];
 
   @Column({ default: 1, type: 'tinyint' })
   status: number;

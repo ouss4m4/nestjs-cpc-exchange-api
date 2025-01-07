@@ -5,6 +5,8 @@ import { Brackets, Repository } from 'typeorm';
 import { Campaign } from './entities/campaign.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CampaignCountry } from './entities/campaign-countries.entity';
+import { ICampaignListReponse } from 'src/shared/types';
+import { mapCampaignModelToDTO } from 'src/mappers/Campaign.mappers';
 
 @Injectable()
 export class CampaignsService {
@@ -43,11 +45,13 @@ export class CampaignsService {
     advertiserId,
     status,
     country,
+    page,
   }: {
     advertiserId?: number;
     status?: number;
     country?: number;
-  }) {
+    page?: number;
+  }): Promise<ICampaignListReponse> {
     const queryBuilder = this.campaignRepo.createQueryBuilder('campaign');
 
     // Include related entities
@@ -84,7 +88,11 @@ export class CampaignsService {
       );
     }
 
-    return queryBuilder.getMany();
+    if (page > 1) {
+      queryBuilder.skip(page * 10);
+    }
+    const [data, rowsCount] = await queryBuilder.take(10).getManyAndCount();
+    return { data: data.map(mapCampaignModelToDTO), rowsCount };
   }
 
   async findOne(
