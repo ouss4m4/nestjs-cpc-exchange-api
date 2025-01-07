@@ -19,17 +19,17 @@ export class GetActiveCampaignsService {
       ];
     }
     // TODO: call the build campaign cache dont do it here
-    const activeCampaigns = await this.campService.findAll({});
+    // const activeCampaigns = await this.campService.findAll({});
 
-    if (activeCampaigns.length > 0) {
-      await this.redisClient.set(
-        'active-campaigns',
-        JSON.stringify(activeCampaigns),
-      );
-      return activeCampaigns[
-        Math.floor(Math.random() * activeCampaigns.length)
-      ];
-    }
+    // if (activeCampaigns.length > 0) {
+    //   await this.redisClient.set(
+    //     'active-campaigns',
+    //     JSON.stringify(activeCampaigns),
+    //   );
+    //   return activeCampaigns[
+    //     Math.floor(Math.random() * activeCampaigns.length)
+    //   ];
+    // }
 
     return null;
   }

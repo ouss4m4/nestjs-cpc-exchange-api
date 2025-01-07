@@ -11,7 +11,7 @@ import {
 import { CampaignsService } from './campaigns.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
-
+import { ICampaignListReponse } from 'src/shared/types';
 @Controller('campaigns')
 export class CampaignsController {
   constructor(private readonly campaignsService: CampaignsService) {}
@@ -26,22 +26,20 @@ export class CampaignsController {
     @Query('advId') advertiserId: number,
     @Query('status') status: number,
     @Query('country') country: number,
-  ) {
+    @Query('page') page: number,
+  ): Promise<ICampaignListReponse> {
     const options: {
       advertiserId?: number;
       status?: number;
       country?: number;
+      page?: number;
     } = {};
     if (advertiserId) options['advertiserId'] = advertiserId;
     if (status) options['status'] = status;
     if (country) options['country'] = country;
+    if (page) options['page'] = page;
 
-    const campaigns = await this.campaignsService.findAll(options);
-
-    return campaigns.map((camp) => ({
-      ...camp,
-      countries: camp.countries.map(({ country }) => country),
-    }));
+    return await this.campaignsService.findAll(options);
   }
 
   @Get(':id')
