@@ -89,7 +89,7 @@ export class CampaignsService {
     }
 
     if (page > 1) {
-      queryBuilder.skip(page * 10);
+      queryBuilder.skip((page - 1) * 10);
     }
     const [data, rowsCount] = await queryBuilder.take(10).getManyAndCount();
     return { data: data.map(mapCampaignModelToDTO), rowsCount };
