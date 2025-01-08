@@ -43,6 +43,7 @@ export class CampaignsService {
 
   async findAll({
     advertiserId,
+    landerId,
     status,
     country,
     page,
@@ -51,6 +52,7 @@ export class CampaignsService {
     order,
   }: {
     advertiserId?: number;
+    landerId?: number;
     status?: number;
     country?: number;
     page?: number;
@@ -70,13 +72,19 @@ export class CampaignsService {
     // Add filters based on query parameters
     if (advertiserId) {
       queryBuilder.andWhere('campaign.advertiserId = :advertiserId', {
-        advertiserId: Number(advertiserId),
+        advertiserId: advertiserId,
+      });
+    }
+
+    if (landerId) {
+      queryBuilder.andWhere('campaign.landerId = :landerId', {
+        landerId: landerId,
       });
     }
 
     if (status) {
       queryBuilder.andWhere('campaign.status = :status', {
-        status: Number(status),
+        status: status,
       });
     }
 
