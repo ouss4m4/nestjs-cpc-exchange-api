@@ -101,10 +101,19 @@ export class CampaignsService {
     }
 
     if (sortBy && order) {
-      queryBuilder.orderBy(
-        `campaign.${sortBy}`,
-        order == 'asc' ? 'ASC' : 'DESC',
-      );
+      switch (sortBy) {
+        case 'advertiser':
+          sortBy = `advertiser.name`;
+          break;
+        case 'lander':
+          sortBy = `lander.name`;
+          break;
+        default:
+          sortBy = `campaign.${sortBy}`;
+          break;
+      }
+
+      queryBuilder.orderBy(`${sortBy}`, order == 'asc' ? 'ASC' : 'DESC');
     }
 
     if (page > 1) {
