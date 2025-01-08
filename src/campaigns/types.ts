@@ -1,10 +1,14 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsOptional, IsInt, IsString, IsEnum } from 'class-validator';
 
 export class FindAllCampaignsDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
+  @Transform(({ obj }) => obj.advId) // Maps "advId" to "advertiserId" url => domain
+  set advId(value: number) {
+    this.advertiserId = value;
+  }
   advertiserId?: number;
 
   @IsOptional()
