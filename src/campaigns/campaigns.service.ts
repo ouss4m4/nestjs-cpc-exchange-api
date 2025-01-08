@@ -115,7 +115,12 @@ export class CampaignsService {
     if (!campaign) {
       throw new NotFoundException(`Campaign with ID ${id} not found`);
     }
-    return campaign;
+    return {
+      ...campaign,
+      countries: campaign.countries.map((campCountry) => ({
+        ...campCountry.country,
+      })),
+    };
   }
 
   async update(id: number, updateCampaignDto: UpdateCampaignDto) {
