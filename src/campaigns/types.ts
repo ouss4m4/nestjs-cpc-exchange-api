@@ -14,6 +14,14 @@ export class FindAllCampaignsDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
+  set lander(value: number) {
+    this.landerId = value;
+  }
+  landerId?: number;
+
+  @IsOptional()
+  @IsInt()
+  @Type(() => Number)
   status?: number;
 
   @IsOptional()
