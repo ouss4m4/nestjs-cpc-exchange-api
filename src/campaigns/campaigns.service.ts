@@ -46,11 +46,13 @@ export class CampaignsService {
     status,
     country,
     page,
+    device,
   }: {
     advertiserId?: number;
     status?: number;
     country?: number;
     page?: number;
+    device?: number;
   }): Promise<ICampaignListReponse> {
     const queryBuilder = this.campaignRepo.createQueryBuilder('campaign');
 
@@ -71,6 +73,12 @@ export class CampaignsService {
     if (status) {
       queryBuilder.andWhere('campaign.status = :status', {
         status: Number(status),
+      });
+    }
+
+    if (device) {
+      queryBuilder.andWhere('JSON_CONTAINS(campaign.device, :id, "$")', {
+        id: JSON.stringify({ id: Number(device) }), // JSON IS Sensitive to string/number '2' != 2
       });
     }
 
