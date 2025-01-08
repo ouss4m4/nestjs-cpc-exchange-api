@@ -11,6 +11,7 @@ import {
 import { CampaignsService } from './campaigns.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
+import { FindAllCampaignsDto } from './types';
 import { ICampaignListReponse } from 'src/shared/types';
 @Controller('campaigns')
 export class CampaignsController {
@@ -23,26 +24,9 @@ export class CampaignsController {
 
   @Get()
   async findAll(
-    @Query('advId') advertiserId: number,
-    @Query('status') status: number,
-    @Query('country') country: number,
-    @Query('device') device: number,
-    @Query('page') page: number,
+    @Query() query: FindAllCampaignsDto,
   ): Promise<ICampaignListReponse> {
-    const options: {
-      advertiserId?: number;
-      status?: number;
-      country?: number;
-      page?: number;
-      device?: number;
-    } = {};
-    if (advertiserId) options['advertiserId'] = advertiserId;
-    if (status) options['status'] = status;
-    if (country) options['country'] = country;
-    if (page) options['page'] = page;
-    if (device) options['device'] = device;
-
-    return await this.campaignsService.findAll(options);
+    return await this.campaignsService.findAll(query);
   }
 
   @Get(':id')

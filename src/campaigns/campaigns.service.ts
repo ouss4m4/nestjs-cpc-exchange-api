@@ -47,12 +47,16 @@ export class CampaignsService {
     country,
     page,
     device,
+    sortBy,
+    order,
   }: {
     advertiserId?: number;
     status?: number;
     country?: number;
     page?: number;
     device?: number;
+    sortBy?: string;
+    order?: string;
   }): Promise<ICampaignListReponse> {
     const queryBuilder = this.campaignRepo.createQueryBuilder('campaign');
 
@@ -96,9 +100,17 @@ export class CampaignsService {
       );
     }
 
+    if (sortBy && order) {
+      queryBuilder.orderBy(
+        `campaign.${sortBy}`,
+        order == 'asc' ? 'ASC' : 'DESC',
+      );
+    }
+
     if (page > 1) {
       queryBuilder.skip((page - 1) * 10);
     }
+
     const [data, rowsCount] = await queryBuilder.take(10).getManyAndCount();
     return { data: data.map(mapCampaignModelToDTO), rowsCount };
   }
