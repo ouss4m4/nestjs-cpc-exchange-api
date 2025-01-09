@@ -25,5 +25,7 @@ jobs:
           ssh root@157.230.225.134 "
           cd ~/nestjs-api &&
           git pull &&
-          docker-compose -f docker-compose.prod.yml up --build -d --scale app=1
+          echo 'git hub deploy' >> github.md &&
+          docker-compose -f docker-compose.prod.yml up --build -d --scale app=1 &&
+          echo 'github compose' >> github.md
           "
