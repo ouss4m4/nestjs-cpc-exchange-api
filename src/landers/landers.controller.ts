@@ -14,6 +14,7 @@ import { CreateLanderDto } from './dto/create-lander.dto';
 import { UpdateLanderDto } from './dto/update-lander.dto';
 import { FindManyOptions, FindOptionsWhere } from 'typeorm';
 import { Lander } from './entities/lander.entity';
+import { findAllLandersDTO } from './types';
 
 @Controller('landers')
 export class LandersController {
@@ -25,25 +26,30 @@ export class LandersController {
   }
 
   @Get()
-  findAll(
-    @Query('clientId') clientId: string,
-    @Query('status') status: string,
-  ) {
+  findAll(@Query() query: findAllLandersDTO) {
     const where: FindOptionsWhere<Lander> = {};
-    if (clientId) {
-      where['clientId'] = Number(clientId);
+    if (query.clientId) {
+      where['clientId'] = Number(query.clientId);
     }
-    if (status) {
-      where['status'] = Number(status);
+    if (query.status) {
+      where['status'] = Number(query.status);
+    }
+    let skip = 0;
+    if (query.page > 1) {
+      skip = (query.page - 1) * 10;
+    }
+
+    let order: Record<string, string> = { updatedAt: 'DESC' };
+    if (query.sortBy && query.sortBy != 'updatedAt') {
+      order = {};
+      order[query.sortBy] = query.order == 'asc' ? 'ASC' : 'DESC';
     }
 
     const findOptions: FindManyOptions<Lander> = {
-      withDeleted: true,
       relations: ['client'],
-      take: 20,
-      order: {
-        id: 'DESC',
-      },
+      take: 10,
+      skip,
+      order,
       where,
       select: {
         client: {

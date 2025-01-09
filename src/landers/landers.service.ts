@@ -24,7 +24,11 @@ export class LandersService {
   }
 
   async findAll(findOptions: FindManyOptions<Lander> = {}) {
-    return await this.landerRepository.find(findOptions);
+    const result = await this.landerRepository.findAndCount(findOptions);
+    let data = result[0];
+    const rowsCount = result[1];
+    data = data.map((lander) => ({ ...lander, advertiser: lander.client }));
+    return { data, rowsCount };
   }
 
   async findOne(id: number) {
