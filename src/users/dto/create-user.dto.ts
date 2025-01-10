@@ -11,5 +11,5 @@ export class CreateUserDto {
   password: string;
 
   @IsNotEmpty()
-  clientId: number;
+  clientId: number = 1;
 }

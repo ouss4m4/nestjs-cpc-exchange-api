@@ -15,7 +15,7 @@ export class UserService {
     private usersRepository: Repository<User>,
     @Inject('REDIS_CLIENT') private readonly redisClient: RedisClientType,
   ) {}
-  async create(createUserDto: CreateUserDto): Promise<any> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
     const user = this.usersRepository.create({
