@@ -5,18 +5,13 @@ export class FindAllCampaignsDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  @Transform(({ obj }) => obj.advId) // Maps "advId" to "advertiserId" url => domain
-  set advId(value: number) {
-    this.advertiserId = value;
-  }
+  @Transform(({ value, obj }) => value ?? obj.advId) // Transform "advId" to "advertiserId"
   advertiserId?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  set lander(value: number) {
-    this.landerId = value;
-  }
+  @Transform(({ value }) => value) // No setter needed
   landerId?: number;
 
   @IsOptional()
