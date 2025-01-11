@@ -17,11 +17,6 @@ export class CampaignsService {
     private campaignCountryRepo: Repository<CampaignCountry>,
   ) {}
   async create(createCampaignDto: CreateCampaignDto) {
-    await new Promise<void>((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
     const { countries, ...campaignData } = createCampaignDto;
 
     const campaign = this.campaignRepo.create(campaignData);
