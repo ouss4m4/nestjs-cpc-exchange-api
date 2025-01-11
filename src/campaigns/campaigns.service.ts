@@ -7,7 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CampaignCountry } from './entities/campaign-countries.entity';
 import { ICampaignListReponse } from 'src/shared/types';
 import { mapCampaignModelToDTO } from 'src/mappers/Campaign.mappers';
-
+import { createWriteStream } from 'fs';
+import { join } from 'path';
 @Injectable()
 export class CampaignsService {
   constructor(
@@ -195,5 +196,120 @@ export class CampaignsService {
       console.error(error);
       return false;
     }
+  }
+
+  async export({
+    advertiserId,
+    landerId,
+    status,
+    country,
+    device,
+    sortBy,
+    order,
+  }: {
+    advertiserId?: number;
+    landerId?: number;
+    status?: number;
+    country?: number;
+    device?: number;
+    sortBy?: string;
+    order?: string;
+  }) {
+    /**
+     * STEP1 : GET DATA
+     * TODO: Move function to separate folder
+     */
+
+    const queryBuilder = this.campaignRepo.createQueryBuilder('campaign');
+
+    // Include related entities
+    queryBuilder
+      .leftJoinAndSelect('campaign.advertiser', 'advertiser')
+      .leftJoinAndSelect('campaign.lander', 'lander')
+      .leftJoinAndSelect('campaign.countries', 'campaignCountries')
+      .leftJoinAndSelect('campaignCountries.country', 'countryEntity');
+
+    // Add filters based on query parameters
+    if (advertiserId) {
+      queryBuilder.andWhere('campaign.advertiserId = :advertiserId', {
+        advertiserId: advertiserId,
+      });
+    }
+
+    if (landerId) {
+      queryBuilder.andWhere('campaign.landerId = :landerId', {
+        landerId: landerId,
+      });
+    }
+
+    if (status) {
+      queryBuilder.andWhere('campaign.status = :status', {
+        status: status,
+      });
+    }
+
+    if (device) {
+      queryBuilder.andWhere('JSON_CONTAINS(campaign.device, :id, "$")', {
+        id: JSON.stringify({ id: Number(device) }), // JSON IS Sensitive to string/number '2' != 2
+      });
+    }
+
+    if (country && country !== 1) {
+      // Ensure the specified country is associated
+      queryBuilder.andWhere(
+        new Brackets((qb) => {
+          qb.where(
+            'EXISTS (SELECT 1 FROM campaign_countries cc WHERE cc.campaign_id = campaign.id AND cc.country_id = :country)',
+            {
+              country: Number(country),
+            },
+          ).orWhere('campaignCountries.country = 1');
+        }),
+      );
+    }
+
+    if (sortBy && order) {
+      switch (sortBy) {
+        case 'advertiser':
+          sortBy = `advertiser.name`;
+          break;
+        case 'lander':
+          sortBy = `lander.name`;
+          break;
+        default:
+          sortBy = `campaign.${sortBy}`;
+          break;
+      }
+
+      queryBuilder.orderBy(`${sortBy}`, order == 'asc' ? 'ASC' : 'DESC');
+    }
+
+    const data = await queryBuilder.getMany();
+    const formattedData = data.map(mapCampaignModelToDTO);
+
+    // mkdir(join(__dirname, '..', 'exports'), { recursive: true }, (err) => {
+    //   console.error(err);
+    // });
+
+    const filePath = join(process.cwd(), 'src/exports/campaigns.csv');
+    const writeStream = createWriteStream(filePath);
+    await new Promise((resolve) => {
+      writeStream.write('ID,Name,Status,Advertiser,Lander,Countries\n');
+
+      formattedData.forEach((campaign) => {
+        writeStream.write(
+          `"${campaign.id}","${campaign.name}","${campaign.status}","${campaign.advertiser.name}","${campaign.lander.name}","${campaign.countries
+            .map((country) => country.name)
+            .join(',')}"\n`,
+        );
+      });
+      writeStream.end();
+      writeStream.on('finish', () => resolve(''));
+    });
+    return filePath;
+  }
+  catch(error) {
+    console.error('Error exporting campaigns to CSV:', error);
+    throw error;
   }
 }
