@@ -161,10 +161,11 @@ export class CampaignsService {
       throw new NotFoundException(`Campaign with ID ${id} not found`);
     }
 
-    Object.assign(campaign, campaignData);
-
+    const newData = Object.assign(campaign, campaignData);
+    campaign.advertiser = { id: campaignData.advertiserId } as any;
+    campaign.lander = { id: campaignData.advertiserId } as any;
     try {
-      const updatedCampaign = await this.campaignRepo.save(campaign);
+      const updatedCampaign = await this.campaignRepo.save(newData);
 
       // TODO: all countries should be handled in validation?
       if (countries && countries.length > 0) {
@@ -181,7 +182,6 @@ export class CampaignsService {
 
         await this.campaignCountryRepo.save(campaignCountries);
       }
-
       return updatedCampaign;
     } catch (error) {
       return error;
