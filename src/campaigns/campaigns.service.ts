@@ -294,12 +294,14 @@ export class CampaignsService {
     const filePath = join(process.cwd(), 'src/exports/campaigns.csv');
     const writeStream = createWriteStream(filePath);
     await new Promise((resolve) => {
-      writeStream.write('ID,Name,Status,Advertiser,Lander,Countries\n');
+      writeStream.write('ID,Name,Status,Advertiser,Lander,Countries,Devices\n');
 
       formattedData.forEach((campaign) => {
         writeStream.write(
           `"${campaign.id}","${campaign.name}","${campaign.status}","${campaign.advertiser.name}","${campaign.lander.name}","${campaign.countries
             .map((country) => country.name)
+            .join(',')}","${campaign.device
+            .map((device) => device.name)
             .join(',')}"\n`,
         );
       });

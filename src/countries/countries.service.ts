@@ -16,4 +16,8 @@ export class CountriesService {
   findOne(id: number) {
     return this.countryRepo.findOneBy({ id });
   }
+
+  findOneByName(name: string) {
+    return this.countryRepo.findOneBy({ name });
+  }
 }
