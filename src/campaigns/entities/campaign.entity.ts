@@ -61,6 +61,7 @@ export class Campaign {
   @OneToMany(
     () => CampaignCountry,
     (campaignCountry) => campaignCountry.campaign,
+    { cascade: true, onDelete: 'CASCADE' },
   )
   countries: CampaignCountry[];
 }

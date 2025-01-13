@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -35,6 +35,14 @@ export class ClientsService {
 
   findOne(id: number) {
     return `This action returns a #${id} client`;
+  }
+
+  async findOneByName(name: string) {
+    const client = await this.clientsRepository.findOneBy({ name });
+    if (!client) {
+      throw new NotFoundException(`client with name ${name} not found`);
+    }
+    return client;
   }
 
   update(id: number, updateClientDto: UpdateClientDto) {

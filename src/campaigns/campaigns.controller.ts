@@ -8,6 +8,8 @@ import {
   Delete,
   Query,
   Res,
+  UseInterceptors,
+  UploadedFile,
   // UseGuards,
 } from '@nestjs/common';
 import { CampaignsService } from './campaigns.service';
@@ -16,11 +18,17 @@ import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { FindAllCampaignsDto } from './types';
 import { ICampaignListReponse } from 'src/shared/types';
 import { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { fileUploadConfig } from 'src/shared/fileupload.config';
+import { CampaignsUploadService } from './campaignsUpload.service';
 // import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 // @UseGuards(JwtAuthGuard)
 @Controller('campaigns')
 export class CampaignsController {
-  constructor(private readonly campaignsService: CampaignsService) {}
+  constructor(
+    private readonly campaignsService: CampaignsService,
+    private readonly campaignsUpload: CampaignsUploadService,
+  ) {}
 
   @Post()
   create(@Body() createCampaignDto: CreateCampaignDto) {
@@ -44,6 +52,13 @@ export class CampaignsController {
     res.setHeader('Content-Type', 'text/csv');
     // Send the file
     res.sendFile(filePath);
+  }
+
+  @Post('/upload')
+  @UseInterceptors(FileInterceptor('file', fileUploadConfig))
+  async uploadCampaigns(@UploadedFile() file: Express.Multer.File) {
+    const result = await this.campaignsUpload.processCsvFile(file.path);
+    return result;
   }
 
   @Get(':id')

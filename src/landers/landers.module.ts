@@ -8,5 +8,6 @@ import { Lander } from './entities/lander.entity';
   imports: [TypeOrmModule.forFeature([Lander])],
   controllers: [LandersController],
   providers: [LandersService],
+  exports: [LandersService],
 })
 export class LandersModule {}

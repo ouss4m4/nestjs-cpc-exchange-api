@@ -42,6 +42,14 @@ export class LandersService {
     return lander;
   }
 
+  async findOneByName(name: string) {
+    const lander = await this.landerRepository.findOneBy({ name });
+    if (!lander) {
+      throw new NotFoundException(`Lander with name ${name} not found`);
+    }
+    return lander;
+  }
+
   async update(id: number, updateLanderDto: UpdateLanderDto) {
     const lander = await this.findOne(id);
     if (!lander) {

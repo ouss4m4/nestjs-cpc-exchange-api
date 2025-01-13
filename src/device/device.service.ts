@@ -17,4 +17,8 @@ export class DeviceService {
   findOne(id: number) {
     return this.deviceRepo.findBy({ id });
   }
+
+  findOneByName(name: string) {
+    return this.deviceRepo.findOneBy({ name });
+  }
 }

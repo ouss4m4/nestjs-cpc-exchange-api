@@ -42,3 +42,12 @@ export class FindAllCampaignsDto {
   @IsEnum(['asc', 'desc'])
   order?: string;
 }
+
+export interface ICampaignUploadCsvRow {
+  Name: string;
+  Status: string;
+  Advertiser: string;
+  Lander: string;
+  Countries: string;
+  Devices: string;
+}
