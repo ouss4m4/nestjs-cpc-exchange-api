@@ -28,8 +28,8 @@ export class LandersController {
   @Get()
   findAll(@Query() query: findAllLandersDTO) {
     const where: FindOptionsWhere<Lander> = {};
-    if (query.clientId) {
-      where['clientId'] = Number(query.clientId);
+    if (query.advId) {
+      where['clientId'] = Number(query.advId);
     }
     if (query.status) {
       where['status'] = Number(query.status);

@@ -5,7 +5,7 @@ export class findAllLandersDTO {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  clientId: number;
+  advId: number;
 
   @IsOptional()
   @IsInt()
