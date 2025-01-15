@@ -1,18 +1,26 @@
 import { Transform, Type } from 'class-transformer';
-import { IsOptional, IsInt, IsString, IsEnum } from 'class-validator';
+import {
+  IsOptional,
+  IsInt,
+  IsString,
+  IsEnum,
+  IsNotEmpty,
+} from 'class-validator';
 
 export class FindAllCampaignsDto {
   @IsOptional()
   @IsInt()
   @Type(() => Number)
-  @Transform(({ value, obj }) => value ?? obj.advId) // Transform "advId" to "advertiserId"
-  advertiserId?: number;
+  @Transform(({ value, obj }) => {
+    return value ?? obj?.advId;
+  })
+  advId?: number;
 
   @IsOptional()
   @IsInt()
   @Type(() => Number)
   @Transform(({ value }) => value) // No setter needed
-  landerId?: number;
+  lander?: number;
 
   @IsOptional()
   @IsInt()
@@ -50,4 +58,14 @@ export interface ICampaignUploadCsvRow {
   Lander: string;
   Countries: string;
   Devices: string;
+}
+
+export class DeviceDTO {
+  @IsNotEmpty()
+  @IsEnum([1, 2, 3])
+  id: number;
+
+  @IsNotEmpty()
+  @IsEnum(['Mobile', 'Desktop', 'Tablet'])
+  name: string;
 }

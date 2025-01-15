@@ -9,6 +9,7 @@ import { ICampaignListReponse } from 'src/shared/types';
 import { mapCampaignModelToDTO } from 'src/mappers/Campaign.mappers';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
+import { FindAllCampaignsDto } from './types';
 @Injectable()
 export class CampaignsService {
   constructor(
@@ -43,24 +44,15 @@ export class CampaignsService {
   }
 
   async findAll({
-    advertiserId,
-    landerId,
-    status,
+    advId: advertiserId,
     country,
-    page,
     device,
-    sortBy,
+    lander,
     order,
-  }: {
-    advertiserId?: number;
-    landerId?: number;
-    status?: number;
-    country?: number;
-    page?: number;
-    device?: number;
-    sortBy?: string;
-    order?: string;
-  }): Promise<ICampaignListReponse> {
+    page,
+    sortBy,
+    status,
+  }: FindAllCampaignsDto): Promise<ICampaignListReponse> {
     const queryBuilder = this.campaignRepo.createQueryBuilder('campaign');
 
     // Include related entities
@@ -77,9 +69,9 @@ export class CampaignsService {
       });
     }
 
-    if (landerId) {
+    if (lander) {
       queryBuilder.andWhere('campaign.landerId = :landerId', {
-        landerId: landerId,
+        landerId: lander,
       });
     }
 

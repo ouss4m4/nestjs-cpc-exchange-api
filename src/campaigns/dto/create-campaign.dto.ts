@@ -1,4 +1,6 @@
-import { IsNotEmpty } from 'class-validator';
+import { DeviceDTO } from './../types';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateCampaignDto {
   @IsNotEmpty()
@@ -11,5 +13,10 @@ export class CreateCampaignDto {
   advertiserId: number;
 
   @IsNotEmpty()
-  countries?: number[];
+  countries: number[];
+
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => DeviceDTO)
+  device: DeviceDTO[];
 }
