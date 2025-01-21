@@ -43,16 +43,19 @@ export class CampaignsService {
     }
   }
 
-  async findAll({
-    advId: advertiserId,
-    country,
-    device,
-    lander,
-    order,
-    page,
-    sortBy,
-    status,
-  }: FindAllCampaignsDto): Promise<ICampaignListReponse> {
+  async findAll(
+    {
+      advId: advertiserId,
+      country,
+      device,
+      lander,
+      order,
+      page,
+      sortBy,
+      status,
+    }: FindAllCampaignsDto,
+    user: any,
+  ): Promise<ICampaignListReponse> {
     const queryBuilder = this.campaignRepo.createQueryBuilder('campaign');
 
     // Include related entities
@@ -62,6 +65,11 @@ export class CampaignsService {
       .leftJoinAndSelect('campaign.countries', 'campaignCountries')
       .leftJoinAndSelect('campaignCountries.country', 'countryEntity');
 
+    if (!user.isAdmin) {
+      queryBuilder.andWhere('campaign.advertiserId = :clientId', {
+        clientId: user.clientId,
+      });
+    }
     // Add filters based on query parameters
     if (advertiserId) {
       queryBuilder.andWhere('campaign.advertiserId = :advertiserId', {

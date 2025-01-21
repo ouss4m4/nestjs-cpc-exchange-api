@@ -20,6 +20,7 @@ import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileUploadConfig } from 'src/shared/fileupload.config';
 import { CampaignsUploadService } from './campaignsUpload.service';
+import { CurrentUser } from 'src/auth/constants';
 @Controller('campaigns')
 export class CampaignsController {
   constructor(
@@ -34,9 +35,10 @@ export class CampaignsController {
 
   @Get()
   async findAll(
+    @CurrentUser() user: any,
     @Query() query: FindAllCampaignsDto,
   ): Promise<ICampaignListReponse> {
-    return await this.campaignsService.findAll(query);
+    return await this.campaignsService.findAll(query, user);
   }
 
   @Get('/exports')
