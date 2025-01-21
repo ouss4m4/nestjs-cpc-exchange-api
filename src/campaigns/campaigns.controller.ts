@@ -10,7 +10,6 @@ import {
   Res,
   UseInterceptors,
   UploadedFile,
-  // UseGuards,
 } from '@nestjs/common';
 import { CampaignsService } from './campaigns.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
@@ -21,8 +20,6 @@ import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileUploadConfig } from 'src/shared/fileupload.config';
 import { CampaignsUploadService } from './campaignsUpload.service';
-// import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-// @UseGuards(JwtAuthGuard)
 @Controller('campaigns')
 export class CampaignsController {
   constructor(

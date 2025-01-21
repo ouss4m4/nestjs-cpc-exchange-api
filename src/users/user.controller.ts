@@ -10,11 +10,13 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Public } from 'src/auth/constants';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Public()
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     try {
@@ -24,6 +26,7 @@ export class UserController {
     }
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.userService.findAll();
