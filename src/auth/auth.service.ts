@@ -21,10 +21,15 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { name: user.name, sub: user.id };
+    const payload = {
+      name: user.name,
+      clientId: user.clientId,
+      sub: user.id,
+      isAdmin: user.email == 'john@gmail.com',
+    };
     return {
       jwt: this.jwtService.sign(payload),
-      name: user.name,
+      isAdmin: user.email == 'john@gmail.com',
     };
   }
 }
