@@ -34,7 +34,7 @@ export class User {
   client: Client;
 
   @Column({ name: 'status', default: 1, type: 'tinyint' })
-  status: boolean;
+  status: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;

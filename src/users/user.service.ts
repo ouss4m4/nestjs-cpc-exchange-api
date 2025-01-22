@@ -51,8 +51,15 @@ export class UserService {
     });
   }
 
-  findOneById(id: number) {
-    return this.usersRepository.findOneBy({ id });
+  async findOneById(id: number): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['client'],
+    });
+    if (user) {
+      return user;
+    }
+    return null;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
