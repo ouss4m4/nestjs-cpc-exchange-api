@@ -1,9 +1,11 @@
-import { Controller, Request, Post, UseGuards } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Get } from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { ApiBody } from '@nestjs/swagger';
 import { LoginDto } from './dto/login';
-import { Public } from './constants';
+import { CurrentUser, Public } from './constants';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { ILoggedUserInfo, JwtPayload } from './types';
 
 @Controller()
 export class AuthController {
@@ -14,5 +16,11 @@ export class AuthController {
   @Post('auth/login')
   async login(@Request() req) {
     return this.authService.login(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('auth/info')
+  async userInfo(@CurrentUser() user: JwtPayload): Promise<ILoggedUserInfo> {
+    return this.authService.getLoggedUserInfo(user.sub);
   }
 }

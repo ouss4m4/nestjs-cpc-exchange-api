@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/users/user.service';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'src/users/entities/user.entity';
-import { JwtPayload } from './types';
+import { ILoggedUserInfo, JwtPayload } from './types';
 @Injectable()
 export class AuthService {
   constructor(
@@ -42,6 +42,31 @@ export class AuthService {
     };
     return {
       jwt: this.jwtService.sign(payload),
+    };
+  }
+
+  async getLoggedUserInfo(userId: number): Promise<ILoggedUserInfo> {
+    const user = await this.usersService.findOneById(userId);
+    if (!user) {
+      return null;
+    }
+    const { id, name, email, clientId, status, client, createdAt, updatedAt } =
+      user;
+    const role =
+      email == 'john@gmail.com'
+        ? 'Admin'
+        : user.client.type == 1
+          ? 'Publisher'
+          : 'Advertiser';
+    return {
+      id,
+      name,
+      email,
+      clientId,
+      role,
+      status,
+      createdAt,
+      updatedAt,
     };
   }
 }
