@@ -21,6 +21,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { fileUploadConfig } from 'src/shared/fileupload.config';
 import { CampaignsUploadService } from './campaignsUpload.service';
 import { CurrentUser } from 'src/auth/constants';
+import { JwtPayload } from 'src/auth/types';
 @Controller('campaigns')
 export class CampaignsController {
   constructor(
@@ -35,7 +36,7 @@ export class CampaignsController {
 
   @Get()
   async findAll(
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
     @Query() query: FindAllCampaignsDto,
   ): Promise<ICampaignListReponse> {
     return await this.campaignsService.findAll(query, user);
