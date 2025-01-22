@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/users/user.service';
 import * as bcrypt from 'bcryptjs';
+import { User } from 'src/users/entities/user.entity';
+import { JwtPayload } from './types';
 @Injectable()
 export class AuthService {
   constructor(
@@ -20,16 +22,26 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = {
+  /**
+   *
+   * @param User
+   * @returns LoginResponse -
+   */
+  login(user: User): { jwt: string } {
+    const role =
+      user.email == 'john@gmail.com'
+        ? 'Admin'
+        : user.client.type == 1
+          ? 'Publisher'
+          : 'Advertiser';
+    const payload: JwtPayload = {
       name: user.name,
       clientId: user.clientId,
       sub: user.id,
-      isAdmin: user.email == 'john@gmail.com',
+      role,
     };
     return {
       jwt: this.jwtService.sign(payload),
-      isAdmin: user.email == 'john@gmail.com',
     };
   }
 }

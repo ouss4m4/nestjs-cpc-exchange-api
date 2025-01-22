@@ -40,7 +40,15 @@ export class UserService {
   }
 
   findByEmail(email: string) {
-    return this.usersRepository.findOneBy({ email });
+    return this.usersRepository.findOneBy({ email }).then((user) => {
+      if (user) {
+        return this.usersRepository.findOne({
+          where: { email },
+          relations: ['client'],
+        });
+      }
+      return null;
+    });
   }
 
   findOneById(id: number) {

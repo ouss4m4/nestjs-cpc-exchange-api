@@ -10,6 +10,7 @@ import { mapCampaignModelToDTO } from 'src/mappers/Campaign.mappers';
 import { createWriteStream } from 'fs';
 import { join } from 'path';
 import { FindAllCampaignsDto } from './types';
+import { JwtPayload } from 'src/auth/types';
 @Injectable()
 export class CampaignsService {
   constructor(
@@ -54,7 +55,7 @@ export class CampaignsService {
       sortBy,
       status,
     }: FindAllCampaignsDto,
-    user: any,
+    user: JwtPayload,
   ): Promise<ICampaignListReponse> {
     const queryBuilder = this.campaignRepo.createQueryBuilder('campaign');
 
@@ -65,7 +66,7 @@ export class CampaignsService {
       .leftJoinAndSelect('campaign.countries', 'campaignCountries')
       .leftJoinAndSelect('campaignCountries.country', 'countryEntity');
 
-    if (!user.isAdmin) {
+    if (user.role != 'Admin') {
       queryBuilder.andWhere('campaign.advertiserId = :clientId', {
         clientId: user.clientId,
       });
