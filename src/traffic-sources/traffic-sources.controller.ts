@@ -21,8 +21,9 @@ export class TrafficSourcesController {
   }
 
   @Get()
-  findAll() {
-    return this.trafficSourcesService.findAll();
+  async findAll() {
+    const [data, rowsCount] = await this.trafficSourcesService.findAll();
+    return { data, rowsCount };
   }
 
   @Get(':id')

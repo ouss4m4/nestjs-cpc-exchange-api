@@ -21,8 +21,9 @@ export class TrafficSourcesService {
   }
 
   async findAll() {
-    return await this.trafficSourceRepo.find({
+    return await this.trafficSourceRepo.findAndCount({
       withDeleted: true,
+      relations: ['publisher'],
     });
   }
 
