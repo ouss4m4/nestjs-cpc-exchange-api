@@ -20,6 +20,6 @@ import { CountriesModule } from 'src/countries/countries.module';
   ],
   controllers: [CampaignsController],
   providers: [CampaignsService, CampaignsUploadService],
-  exports: [CampaignsService],
+  exports: [CampaignsService, TypeOrmModule],
 })
 export class CampaignsModule {}

@@ -39,9 +39,9 @@ export class ClickService {
     const clickData: CreateClickDto = {
       publisherId: traffic_source.publisher.id,
       trafficSourceId: traffic_source.id,
-      advertiserId: campaign.advertiser.id,
+      advertiserId: campaign.advertiserId,
       campaignId: campaign.id,
-      landerId: campaign.lander.id,
+      landerId: campaign.landerId,
       ip,
       ua,
       url: fullUrl,
@@ -54,6 +54,7 @@ export class ClickService {
     this.clickRepo.save(click);
     return clickData.redirect;
   }
+
   async findOneByUuid(uuid: string) {
     const click = await this.clickRepo.findOneBy({ uuid });
     if (!click) {
@@ -61,6 +62,7 @@ export class ClickService {
     }
     return click;
   }
+
   async create(click: Click) {
     return await this.clickRepo.save(click);
   }

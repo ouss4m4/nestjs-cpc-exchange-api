@@ -1,22 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Controller,
-  Get,
-  HttpStatus,
-  Param,
-  Post,
-  Req,
-  Res,
-} from '@nestjs/common';
-import { PostbackService } from './postback.service';
+import { Controller, Get, HttpStatus, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { ClickService } from 'src/click/services/click.service';
 import { PostbackJobProducer } from 'src/queues/postback/postback-producer.service';
+import { Public } from 'src/auth/constants';
 
 @Controller('postback')
 export class PostbackController {
   constructor(private readonly pbJob: PostbackJobProducer) {}
 
+  @Public()
   @Get()
   findOne(@Req() request: Request, @Res() res: Response) {
     const uuid = request.query.transaction_id;
