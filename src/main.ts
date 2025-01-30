@@ -12,9 +12,9 @@ async function bootstrap() {
     .setTitle('Click Echange Model')
     .setDescription('Media Buying SAAS')
     .setVersion('0.1')
-    .addTag('')
     .addBearerAuth()
     .build();
+
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
   app.enableCors();

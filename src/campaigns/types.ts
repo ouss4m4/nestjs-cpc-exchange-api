@@ -43,6 +43,11 @@ export class FindAllCampaignsDto {
   page?: number;
 
   @IsOptional()
+  @IsInt()
+  @Type(() => Number)
+  pageSize?: number;
+
+  @IsOptional()
   @IsString()
   sortBy?: string;
 

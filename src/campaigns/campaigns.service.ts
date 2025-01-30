@@ -52,6 +52,7 @@ export class CampaignsService {
       lander,
       order,
       page,
+      pageSize = 10,
       sortBy,
       status,
     }: FindAllCampaignsDto,
@@ -127,10 +128,12 @@ export class CampaignsService {
     }
 
     if (page > 1) {
-      queryBuilder.skip((page - 1) * 10);
+      queryBuilder.skip((page - 1) * pageSize);
     }
 
-    const [data, rowsCount] = await queryBuilder.take(10).getManyAndCount();
+    const [data, rowsCount] = await queryBuilder
+      .take(pageSize)
+      .getManyAndCount();
     return { data: data.map(mapCampaignModelToDTO), rowsCount };
   }
 
