@@ -1,38 +1,65 @@
-version: '3.8'
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '3000'
-    env_file:
-      - .env
-    volumes:
-      - .:/usr/src/app
+      - '3000' # Expose the internal port, without binding to the same host port (ngnix will do)
+    environment:
+      - DB_HOST=dbsql
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=pass
+      - DB_NAME=nestjs
+
+      # Redis Configurations
+      - REDIS_HOST=redis_cache
+      - REDIS_PORT=6379
+
+      - EXPRESS_PORT=3000
     depends_on:
       - dbsql
       - redis_cache
     networks:
       - app_network
+
   nginx:
     image: nginx:latest
     container_name: nginx
     ports:
-      - '8080:80'
+      - '80:80'
+      # - '443:443'
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+      # - ./certs:/etc/letsencrypt # Certs from certbot
+      # - ./certbot:/var/www/certbot # Single directory for Certbot challenges
     depends_on:
       - app
     networks:
       - app_network
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - ./certs:/etc/letsencrypt # Store certs in a volume (nginx takes them)
+  #     - ./certbot:/var/www/certbot # Single directory for Certbot challenges
+  #   command: >
+  #     certonly --webroot --webroot-path=/var/www/certbot
+  #     --email samaouss@gmail.com
+  #     --agree-tos --no-eff-email
+  #     -d api.bzouss.com
+  #   networks:
+  #     - app_network
   dbsql:
     image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_DATABASE=nestjs
     volumes:
       - db_data:/var/lib/mysql
+    ports:
+      - '3306:3306'
     networks:
       - app_network
 
@@ -47,3 +74,4 @@ networks:
 
 volumes:
   db_data:
+  certs:

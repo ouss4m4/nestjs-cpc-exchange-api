@@ -39,7 +39,7 @@ import { PostbackJobProducer } from './postback/postback-producer.service';
     }),
     BullBoardModule.forFeature({
       name: 'postback-jobs',
-      adapter: BullMQAdapter, //or use BullAdapter if you're using bull instead of bullMQ
+      adapter: BullMQAdapter as any, //or use BullAdapter if you're using bull instead of bullMQ
     }),
     forwardRef(() => ClickModule),
     forwardRef(() => PostbackModule),
